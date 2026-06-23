@@ -121,7 +121,7 @@ function Showroom() {
             <label className="text-xs text-muted-foreground mb-2 block">
               السعر حتى: <span className="text-gold font-semibold">{formatEGP(maxPrice)}</span>
             </label>
-            <input type="range" min={500000} max={6000000} step={50000} value={maxPrice}
+            <input type="range" min={500000} max={8000000} step={50000} value={maxPrice}
               onChange={e => setMaxPrice(Number(e.target.value))}
               className="w-full accent-[#C9A84C]" />
           </div>
