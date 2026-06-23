@@ -36,23 +36,23 @@ const seed: Car[] = [
   { id: "12", brand: "Nissan", model: "X-Trail", year: 2023, price: 1380000, color: "بني", fuel: "بنزين", status: "مباع", image: "https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=800" },
   // Audi
   { id: "13", brand: "Audi", model: "A4", year: 2024, price: 2800000, color: "أبيض", fuel: "بنزين", status: "متاح", image: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800" },
-  { id: "14", brand: "Audi", model: "Q7", year: 2023, price: 4900000, color: "أسود", fuel: "ديزل", status: "متاح", image: "https://images.unsplash.com/photo-1503376763036-066120622c74?w=800" },
+  { id: "14", brand: "Audi", model: "Q7", year: 2023, price: 4900000, color: "أسود", fuel: "ديزل", status: "متاح", image: "https://images.unsplash.com/photo-1614200187106-63d44b89bef9?w=800" },
   // Porsche
   { id: "15", brand: "Porsche", model: "Cayenne", year: 2024, price: 7500000, color: "أحمر", fuel: "بنزين", status: "متاح", image: "https://images.unsplash.com/photo-1503376763036-066120622c74?w=800" },
   // Lexus
-  { id: "16", brand: "Lexus", model: "ES 350", year: 2024, price: 3200000, color: "فضي", fuel: "هجين", status: "متاح", image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800" },
+  { id: "16", brand: "Lexus", model: "ES 350", year: 2024, price: 3200000, color: "فضي", fuel: "هجين", status: "متاح", image: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800" },
   // Ford
-  { id: "17", brand: "Ford", model: "Focus", year: 2024, price: 950000, color: "أزرق", fuel: "بنزين", status: "متاح", image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800" },
+  { id: "17", brand: "Ford", model: "Focus", year: 2024, price: 950000, color: "أزرق", fuel: "بنزين", status: "متاح", image: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800" },
   // Chevrolet
   { id: "18", brand: "Chevrolet", model: "Malibu", year: 2024, price: 1100000, color: "رمادي", fuel: "بنزين", status: "محجوز", image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800" },
   // Honda
-  { id: "19", brand: "Honda", model: "Civic", year: 2024, price: 1050000, color: "أحمر", fuel: "بنزين", status: "متاح", image: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800" },
+  { id: "19", brand: "Honda", model: "Civic", year: 2024, price: 1050000, color: "أحمر", fuel: "بنزين", status: "متاح", image: "https://images.unsplash.com/photo-1606152421801-db97b9c7a11b?w=800" },
   // Jeep
   { id: "20", brand: "Jeep", model: "Wrangler", year: 2024, price: 2200000, color: "أخضر", fuel: "بنزين", status: "متاح", image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800" },
   // Volkswagen
   { id: "21", brand: "Volkswagen", model: "Golf", year: 2024, price: 900000, color: "أبيض", fuel: "بنزين", status: "مباع", image: "https://images.unsplash.com/photo-1542362567-b07e54358753?w=800" },
   // Peugeot
-  { id: "22", brand: "Peugeot", model: "3008", year: 2024, price: 1250000, color: "أسود", fuel: "بنزين", status: "متاح", image: "https://images.unsplash.com/photo-1503376763036-066120622c74?w=800" },
+  { id: "22", brand: "Peugeot", model: "3008", year: 2024, price: 1250000, color: "أسود", fuel: "بنزين", status: "متاح", image: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800" },
 ];
 
 export function loadCars(): Car[] {
