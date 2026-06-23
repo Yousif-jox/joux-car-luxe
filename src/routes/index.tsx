@@ -28,6 +28,7 @@ function Showroom() {
   const [brand, setBrand] = useState("الكل");
   const [status, setStatus] = useState<CarStatus | "الكل">("الكل");
   const [maxPrice, setMaxPrice] = useState(6000000);
+  const [query, setQuery] = useState("");
 
   useEffect(() => { setCars(loadCars()); }, []);
 
@@ -35,7 +36,8 @@ function Showroom() {
   const filtered = cars.filter(c =>
     (brand === "الكل" || c.brand === brand) &&
     (status === "الكل" || c.status === status) &&
-    c.price <= maxPrice
+    c.price <= maxPrice &&
+    (query.trim() === "" || `${c.brand} ${c.model}`.toLowerCase().includes(query.trim().toLowerCase()))
   );
 
   return (
@@ -86,7 +88,17 @@ function Showroom() {
 
       {/* Filters */}
       <section className="container mx-auto px-6 mb-8">
-        <div className="card-luxury rounded-2xl p-6 grid md:grid-cols-3 gap-6">
+        <div className="card-luxury rounded-2xl p-6 grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div>
+            <label className="text-xs text-muted-foreground mb-2 block">بحث</label>
+            <input
+              type="text"
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              placeholder="ابحث بالماركة أو الموديل..."
+              className="w-full bg-input border border-border rounded-lg px-3 py-2.5 text-foreground focus:border-gold outline-none"
+            />
+          </div>
           <div>
             <label className="text-xs text-muted-foreground mb-2 block">الماركة</label>
             <select value={brand} onChange={e => setBrand(e.target.value)}
