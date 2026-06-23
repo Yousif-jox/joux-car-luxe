@@ -28,6 +28,7 @@ function Showroom() {
   const [brand, setBrand] = useState("الكل");
   const [status, setStatus] = useState<CarStatus | "الكل">("الكل");
   const [maxPrice, setMaxPrice] = useState(6000000);
+  const [query, setQuery] = useState("");
 
   useEffect(() => { setCars(loadCars()); }, []);
 
@@ -35,7 +36,8 @@ function Showroom() {
   const filtered = cars.filter(c =>
     (brand === "الكل" || c.brand === brand) &&
     (status === "الكل" || c.status === status) &&
-    c.price <= maxPrice
+    c.price <= maxPrice &&
+    (query.trim() === "" || `${c.brand} ${c.model}`.toLowerCase().includes(query.trim().toLowerCase()))
   );
 
   return (
