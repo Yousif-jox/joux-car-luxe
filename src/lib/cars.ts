@@ -53,6 +53,8 @@ const seed: Car[] = [
   { id: "21", brand: "Volkswagen", model: "Golf", year: 2024, price: 900000, color: "أبيض", fuel: "بنزين", status: "مباع", image: "https://images.unsplash.com/photo-1542362567-b07e54358753?w=800" },
   // Peugeot
   { id: "22", brand: "Peugeot", model: "3008", year: 2024, price: 1250000, color: "أسود", fuel: "بنزين", status: "متاح", image: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b6?w=800" },
+  // Tesla (Electric)
+  { id: "23", brand: "Tesla", model: "Model 3", year: 2024, price: 2400000, color: "أبيض", fuel: "كهربائي", status: "متاح", image: "https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=800" },
 ];
 
 export function loadCars(): Car[] {
