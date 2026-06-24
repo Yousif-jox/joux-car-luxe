@@ -20,6 +20,63 @@ export interface Car {
   image?: string;
   listingType: ListingType;
   rental?: RentalPricing;
+  features?: string[];
+}
+
+export interface SaleRecord {
+  id: string;
+  carId: string;
+  carName: string;
+  clientName: string;
+  clientPhone: string;
+  price: number;
+  date: string;
+}
+
+const SALES_KEY = "jox_sales_v1";
+
+/**
+ * يرجع قائمة مميزات السيارة. لو السيارة فيها features يستخدمها،
+ * وإلا يولد قائمة منطقية بناءً على الفئة السعرية والوقود والماركة.
+ */
+export function getCarFeatures(car: Car): string[] {
+  if (car.features && car.features.length) return car.features;
+
+  const f: string[] = [];
+  const luxuryBrands = ["BMW", "Mercedes", "Audi", "Porsche", "Lexus"];
+  const isLuxury = luxuryBrands.includes(car.brand) || car.price >= 4_000_000;
+  const isMid = !isLuxury && car.price >= 1_200_000;
+
+  // وقود
+  if (car.fuel === "كهربائي") {
+    f.push("محرك كهربائي 100%", "مدى يصل إلى 450 كم", "شحن سريع DC", "صفر انبعاثات");
+  } else if (car.fuel === "هجين") {
+    f.push("نظام هجين موفر للوقود", "استرجاع طاقة الفرامل", "وضع كهربائي للسرعات المنخفضة");
+  } else if (car.fuel === "ديزل") {
+    f.push("محرك ديزل تيربو عالي العزم", "اقتصادي في استهلاك الوقود");
+  } else {
+    f.push("محرك بنزين اقتصادي", "ناقل حركة أوتوماتيك");
+  }
+
+  // الأمان
+  f.push("وسائد هوائية متعددة", "نظام ABS و EBD", "نظام تثبيت إلكتروني ESP");
+  if (isLuxury) f.push("مثبت سرعة تكيفي", "نظام تنبيه المسار", "كاميرا 360°");
+  else if (isMid) f.push("كاميرا خلفية + حساسات ركن");
+
+  // الراحة والترفيه
+  if (isLuxury) {
+    f.push("شاشة لمس كبيرة + Apple CarPlay / Android Auto", "نظام صوت محيطي", "مقاعد جلد كهربائية مع تدفئة وتبريد", "فتحة سقف بانورامية", "إضاءة LED ذكية");
+  } else if (isMid) {
+    f.push("شاشة لمس + Apple CarPlay / Android Auto", "مكيف هواء أوتوماتيك", "بلوتوث ومنافذ USB", "جنوط ألومنيوم");
+  } else {
+    f.push("راديو + بلوتوث", "مكيف هواء", "زجاج كهربائي وقفل مركزي");
+  }
+
+  // إضافات حسب نوع الجسم (تخمين من الموديل)
+  const suvKeywords = ["X", "Q", "Tucson", "Sportage", "Cayenne", "Rush", "Tiggo", "Patrol", "Land Cruiser", "Outlander", "Eclipse", "Duster", "Vitara", "3008", "ZS", "HS", "Wrangler"];
+  if (suvKeywords.some(k => car.model.includes(k))) f.push("دفع رباعي AWD", "خلوص أرضي عالي");
+
+  return f;
 }
 
 export interface RentalRecord {
