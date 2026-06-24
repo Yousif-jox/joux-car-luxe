@@ -306,7 +306,7 @@ function Showroom() {
         </div>
       )}
 
-      {selectedCar && <CarModal car={selectedCar} onClose={() => setSelectedCar(null)} onRent={handleRent} />}
+      {selectedCar && <CarModal car={selectedCar} onClose={() => setSelectedCar(null)} onRent={handleRent} onBuy={handleBuy} />}
 
       {/* Nav */}
       <header className="border-b border-border/50 backdrop-blur-md sticky top-0 z-50 bg-background/80">
