@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { loadCars, saveCars, loadRentals, saveRentals, formatEGP, type Car, type CarStatus, type RentalRecord } from "@/lib/cars";
 
-export const Route = createFileRoute("/car/$id")({
+export const Route = createFileRoute("/car/")({
   component: CarDetail,
 });
 
