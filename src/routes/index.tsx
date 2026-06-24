@@ -266,6 +266,23 @@ function Showroom() {
     showToast(`✓ تم تأجير ${car.brand} ${car.model} للعميل ${clientName} — ${period}`);
   }
 
+  function handleBuy(car: Car, clientName: string, clientPhone: string) {
+    const updatedCars = cars.map(c => c.id === car.id ? { ...c, status: "مباع" as CarStatus } : c);
+    setCars(updatedCars);
+    saveCars(updatedCars);
+    const record: SaleRecord = {
+      id: Date.now().toString(),
+      carId: car.id,
+      carName: `${car.brand} ${car.model}`,
+      clientName,
+      clientPhone,
+      price: car.price,
+      date: new Date().toLocaleDateString("ar-EG"),
+    };
+    saveSales([...loadSales(), record]);
+    showToast(`🛒 تم بيع ${car.brand} ${car.model} للعميل ${clientName}`);
+  }
+
   const brands = useMemo(() => ["الكل", ...Array.from(new Set(cars.map(c => c.brand)))], [cars]);
 
   const filtered = cars.filter(c =>
