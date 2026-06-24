@@ -69,6 +69,29 @@ function CarDetail() {
     showToast(`✓ تم تأجير السيارة للعميل ${clientName.trim()}`);
   }
 
+  function handleBuy() {
+    if (!car) return;
+    if (!clientName.trim() || !clientPhone.trim()) {
+      showToast("⚠ من فضلك ادخل اسم المشتري ورقم الهاتف");
+      return;
+    }
+    const updatedCars = cars.map(c => c.id === car.id ? { ...c, status: "مباع" as CarStatus } : c);
+    setCars(updatedCars);
+    saveCars(updatedCars);
+    const record: SaleRecord = {
+      id: Date.now().toString(),
+      carId: car.id,
+      carName: `${car.brand} ${car.model}`,
+      clientName: clientName.trim(),
+      clientPhone: clientPhone.trim(),
+      price: car.price,
+      date: new Date().toLocaleDateString("ar-EG"),
+    };
+    saveSales([...loadSales(), record]);
+    setName(""); setPhone(""); setShowBuy(false);
+    showToast(`🛒 تم بيع السيارة للعميل ${clientName.trim()}`);
+  }
+
   if (cars.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center">
