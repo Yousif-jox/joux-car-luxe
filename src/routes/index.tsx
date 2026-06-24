@@ -421,6 +421,7 @@ function Showroom() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map(car => {
             const hasRent = (car.listingType === "إيجار" || car.listingType === "بيع وإيجار") && !!car.rental;
+            const canBuy = (car.listingType === "بيع" || car.listingType === "بيع وإيجار") && car.status === "متاح";
             return (
               <article key={car.id} className="card-luxury card-luxury-hover rounded-2xl overflow-hidden cursor-pointer"
                 onClick={() => setSelectedCar(car)}>
@@ -453,10 +454,10 @@ function Showroom() {
                       </div>
                     )}
                   </div>
-                  {hasRent && car.status === "متاح" && (
+                  {canBuy && (
                     <button onClick={e => { e.stopPropagation(); setSelectedCar(car); }}
-                      className="mt-3 w-full py-2 rounded-xl border border-gold/40 text-gold text-xs hover:bg-gold/10 transition font-medium">
-                      🔑 احجز للإيجار
+                      className="mt-3 w-full py-2.5 rounded-xl gold-gradient text-background text-sm font-bold hover:opacity-90 transition flex items-center justify-center gap-2">
+                      🛒 اشتري الآن
                     </button>
                   )}
                 </div>
