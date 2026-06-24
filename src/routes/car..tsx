@@ -222,11 +222,30 @@ function CarDetail() {
               </div>
             )}
 
+            {/* مميزات السيارة */}
+            <div className="card-luxury rounded-2xl p-5">
+              <h3 className="font-bold text-base mb-3">⭐ مميزات السيارة</h3>
+              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {features.map((feat, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm">
+                    <span className="text-gold mt-0.5">✓</span>
+                    <span>{feat}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
             {/* أزرار */}
             <div className="space-y-3">
-              {canRent && !showRent && (
-                <button onClick={() => setShowRent(true)}
+              {canBuy && car.status === "متاح" && !showBuy && (
+                <button onClick={() => { setShowRent(false); setShowBuy(true); }}
                   className="w-full gold-gradient text-background font-bold py-4 rounded-xl hover:opacity-90 transition text-base">
+                  🛒 اشتري الآن
+                </button>
+              )}
+              {canRent && !showRent && (
+                <button onClick={() => { setShowBuy(false); setShowRent(true); }}
+                  className="w-full border border-gold/40 text-gold font-bold py-4 rounded-xl hover:bg-gold/10 transition text-base">
                   🔑 احجز للإيجار
                 </button>
               )}
@@ -236,6 +255,38 @@ function CarDetail() {
                 </div>
               )}
             </div>
+
+            {/* فورم الشراء */}
+            {canBuy && showBuy && (
+              <div className="card-luxury rounded-2xl p-6 border border-gold/20 space-y-4">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="font-bold text-lg">بيانات الشراء</h3>
+                  <button onClick={() => setShowBuy(false)} className="text-muted-foreground hover:text-foreground text-xl">✕</button>
+                </div>
+                <div className="rounded-xl border border-gold/30 bg-gold/5 p-4 text-center">
+                  <div className="text-xs text-muted-foreground mb-1">سعر السيارة</div>
+                  <div className="text-2xl font-black text-gold">{formatEGP(car.price)}</div>
+                </div>
+                <div className="space-y-3">
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1.5 block">اسم المشتري</label>
+                    <input type="text" value={clientName} onChange={e => setName(e.target.value)}
+                      placeholder="الاسم بالكامل..."
+                      className="w-full bg-input border border-border rounded-xl px-4 py-3 text-sm focus:border-gold outline-none transition" />
+                  </div>
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1.5 block">رقم الهاتف</label>
+                    <input type="tel" value={clientPhone} onChange={e => setPhone(e.target.value)}
+                      placeholder="01xxxxxxxxx" dir="ltr"
+                      className="w-full bg-input border border-border rounded-xl px-4 py-3 text-sm focus:border-gold outline-none transition" />
+                  </div>
+                </div>
+                <button onClick={handleBuy}
+                  className="w-full gold-gradient text-background font-bold py-3 rounded-xl hover:opacity-90 transition">
+                  🛒 تأكيد الشراء
+                </button>
+              </div>
+            )}
 
             {/* فورم الإيجار */}
             {canRent && showRent && (
