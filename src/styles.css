@@ -95,3 +95,23 @@
     transform: translateY(-4px);
   }
 }
+
+@keyframes car-drive-rtl {
+  0%   { transform: translateX(110vw); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateX(-20vw); opacity: 0; }
+}
+@keyframes car-drive-ltr {
+  0%   { transform: translateX(-20vw) scaleX(-1); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateX(110vw) scaleX(-1); opacity: 0; }
+}
+.hero-cars {
+  position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0;
+}
+.hero-cars span {
+  position: absolute; display: block; will-change: transform;
+  filter: drop-shadow(0 4px 12px rgba(201, 168, 76, 0.25));
+}
