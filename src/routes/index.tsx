@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { loadCars, saveCars, loadRentals, saveRentals, formatEGP, type Car, type CarStatus, type ListingType, type RentalRecord } from "@/lib/cars";
+import { loadCars, saveCars, loadRentals, saveRentals, loadSales, saveSales, getCarFeatures, formatEGP, type Car, type CarStatus, type ListingType, type RentalRecord, type SaleRecord } from "@/lib/cars";
 
 export const Route = createFileRoute("/")({
   head: () => ({
