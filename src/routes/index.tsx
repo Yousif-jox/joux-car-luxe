@@ -323,6 +323,27 @@ function Showroom() {
 
       {/* Hero */}
       <section className="relative overflow-hidden py-24 px-6">
+        {/* سيارات متحركة في الخلفية */}
+        <div className="hero-cars" aria-hidden="true">
+          {[
+            { emoji: "🚗", top: "12%", size: "3.5rem", duration: "18s", delay: "0s",   dir: "rtl" },
+            { emoji: "🏎️", top: "32%", size: "3rem",   duration: "12s", delay: "3s",   dir: "rtl" },
+            { emoji: "🚙", top: "55%", size: "4rem",   duration: "22s", delay: "1.5s", dir: "ltr" },
+            { emoji: "🚘", top: "72%", size: "2.8rem", duration: "16s", delay: "6s",   dir: "rtl" },
+            { emoji: "🛻", top: "88%", size: "3.2rem", duration: "20s", delay: "4s",   dir: "ltr" },
+          ].map((c, i) => (
+            <span key={i}
+              style={{
+                top: c.top, fontSize: c.size,
+                animation: `${c.dir === "rtl" ? "car-drive-rtl" : "car-drive-ltr"} ${c.duration} linear ${c.delay} infinite`,
+                opacity: 0.18,
+              }}>
+              {c.emoji}
+            </span>
+          ))}
+        </div>
+        {/* تدرج لإبراز النص فوق السيارات */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/40 to-background/80 z-0 pointer-events-none" />
         <div className="container mx-auto text-center relative z-10">
           <div className="inline-block px-4 py-1.5 rounded-full border border-gold/30 text-gold text-xs mb-6 tracking-widest">★ معرض السيارات الفاخرة ★</div>
           <h1 className="text-5xl md:text-7xl font-black mb-6 text-gold-gradient leading-tight">معرض السيارات جوكس</h1>
