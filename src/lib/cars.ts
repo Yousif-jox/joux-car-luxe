@@ -287,6 +287,19 @@ export function saveRentals(rentals: RentalRecord[]) {
   localStorage.setItem(RENTALS_KEY, JSON.stringify(rentals));
 }
 
+export function loadSales(): SaleRecord[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(SALES_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch { return []; }
+}
+
+export function saveSales(sales: SaleRecord[]) {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(SALES_KEY, JSON.stringify(sales));
+}
+
 export function formatEGP(n: number) {
   return new Intl.NumberFormat("ar-EG").format(n) + " ج.م";
 }
