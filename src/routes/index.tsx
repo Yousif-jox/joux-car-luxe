@@ -26,18 +26,19 @@ function statusBadge(s: CarStatus) {
 }
 
 // ─── Modal ───────────────────────────────────────────────────────────────────
-function CarModal({ car, onClose, onRent }: {
+function CarModal({ car, onClose, onRent, onBuy }: {
   car: Car;
   onClose: () => void;
   onRent: (car: Car, period: RentPeriod, name: string, phone: string) => void;
+  onBuy: (car: Car, name: string, phone: string) => void;
 }) {
-  const [tab, setTab]           = useState<"details" | "rent">("details");
+  const canBuy  = (car.listingType === "بيع"   || car.listingType === "بيع وإيجار") && car.status === "متاح";
+  const canRent = (car.listingType === "إيجار" || car.listingType === "بيع وإيجار") && !!car.rental && car.status === "متاح";
+
+  const [tab, setTab]           = useState<"details" | "buy" | "rent">("details");
   const [period, setPeriod]     = useState<RentPeriod>("يوم");
   const [clientName, setName]   = useState("");
   const [clientPhone, setPhone] = useState("");
-
-  const canRent = (car.listingType === "إيجار" || car.listingType === "بيع وإيجار")
-    && !!car.rental && car.status === "متاح";
 
   const rentalPrice = car.rental
     ? period === "يوم" ? car.rental.pricePerDay
@@ -45,9 +46,16 @@ function CarModal({ car, onClose, onRent }: {
     : car.rental.pricePerMonth
     : 0;
 
-  function submit() {
+  const features = getCarFeatures(car);
+
+  function submitRent() {
     if (!clientName.trim() || !clientPhone.trim()) { alert("من فضلك ادخل اسم العميل ورقم الهاتف"); return; }
     onRent(car, period, clientName.trim(), clientPhone.trim());
+    onClose();
+  }
+  function submitBuy() {
+    if (!clientName.trim() || !clientPhone.trim()) { alert("من فضلك ادخل اسم المشتري ورقم الهاتف"); return; }
+    onBuy(car, clientName.trim(), clientPhone.trim());
     onClose();
   }
 
@@ -72,16 +80,24 @@ function CarModal({ car, onClose, onRent }: {
         </div>
 
         {/* تابز */}
-        {canRent && (
+        {(canBuy || canRent) && (
           <div className="px-6 flex gap-2 mb-4">
             <button onClick={() => setTab("details")}
               className={`flex-1 py-2 rounded-lg text-sm font-medium transition ${tab === "details" ? "gold-gradient text-background" : "border border-border hover:border-gold/50"}`}>
               التفاصيل
             </button>
-            <button onClick={() => setTab("rent")}
-              className={`flex-1 py-2 rounded-lg text-sm font-medium transition ${tab === "rent" ? "gold-gradient text-background" : "border border-border hover:border-gold/50"}`}>
-              🔑 إيجار
-            </button>
+            {canBuy && (
+              <button onClick={() => setTab("buy")}
+                className={`flex-1 py-2 rounded-lg text-sm font-medium transition ${tab === "buy" ? "gold-gradient text-background" : "border border-border hover:border-gold/50"}`}>
+                🛒 اشتري
+              </button>
+            )}
+            {canRent && (
+              <button onClick={() => setTab("rent")}
+                className={`flex-1 py-2 rounded-lg text-sm font-medium transition ${tab === "rent" ? "gold-gradient text-background" : "border border-border hover:border-gold/50"}`}>
+                🔑 إيجار
+              </button>
+            )}
           </div>
         )}
 
@@ -105,7 +121,7 @@ function CarModal({ car, onClose, onRent }: {
                   <span className="text-xl font-bold text-gold">{formatEGP(car.price)}</span>
                 </div>
               )}
-              {canRent && car.rental && (
+              {car.rental && (
                 <div className="rounded-xl border border-border/50 p-4 space-y-2">
                   <div className="text-xs text-muted-foreground mb-3 font-semibold">أسعار الإيجار</div>
                   {[["اليوم", car.rental.pricePerDay], ["الأسبوع", car.rental.pricePerWeek], ["الشهر", car.rental.pricePerMonth]].map(([label, price]) => (
@@ -116,6 +132,52 @@ function CarModal({ car, onClose, onRent }: {
                   ))}
                 </div>
               )}
+              {/* مميزات السيارة */}
+              <div className="rounded-xl border border-border/50 p-4">
+                <div className="text-xs text-muted-foreground mb-3 font-semibold">⭐ مميزات السيارة</div>
+                <ul className="grid grid-cols-1 gap-2">
+                  {features.map((feat, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm">
+                      <span className="text-gold mt-0.5">✓</span>
+                      <span>{feat}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              {canBuy && (
+                <button onClick={() => setTab("buy")}
+                  className="w-full gold-gradient text-background font-bold py-3 rounded-xl hover:opacity-90 transition text-sm">
+                  🛒 اشتري الآن
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* تاب الشراء */}
+          {tab === "buy" && canBuy && (
+            <div className="space-y-4">
+              <div className="rounded-xl border border-gold/30 bg-gold/5 p-4 text-center">
+                <div className="text-xs text-muted-foreground mb-1">سعر السيارة</div>
+                <div className="text-2xl font-black text-gold">{formatEGP(car.price)}</div>
+                <div className="text-xs text-muted-foreground mt-1">{car.brand} {car.model} — {car.year}</div>
+              </div>
+              <div className="space-y-3">
+                <div>
+                  <label className="text-xs text-muted-foreground mb-1.5 block">اسم المشتري</label>
+                  <input type="text" value={clientName} onChange={e => setName(e.target.value)}
+                    placeholder="الاسم بالكامل..."
+                    className="w-full bg-input border border-border rounded-xl px-4 py-2.5 text-sm focus:border-gold outline-none transition" />
+                </div>
+                <div>
+                  <label className="text-xs text-muted-foreground mb-1.5 block">رقم الهاتف</label>
+                  <input type="tel" value={clientPhone} onChange={e => setPhone(e.target.value)}
+                    placeholder="01xxxxxxxxx" dir="ltr"
+                    className="w-full bg-input border border-border rounded-xl px-4 py-2.5 text-sm focus:border-gold outline-none transition" />
+                </div>
+              </div>
+              <button onClick={submitBuy} className="w-full gold-gradient text-background font-bold py-3 rounded-xl hover:opacity-90 transition text-sm">
+                🛒 تأكيد الشراء
+              </button>
             </div>
           )}
 
@@ -152,7 +214,7 @@ function CarModal({ car, onClose, onRent }: {
                     className="w-full bg-input border border-border rounded-xl px-4 py-2.5 text-sm focus:border-gold outline-none transition" />
                 </div>
               </div>
-              <button onClick={submit} className="w-full gold-gradient text-background font-bold py-3 rounded-xl hover:opacity-90 transition text-sm">
+              <button onClick={submitRent} className="w-full gold-gradient text-background font-bold py-3 rounded-xl hover:opacity-90 transition text-sm">
                 ✓ تأكيد الإيجار
               </button>
             </div>
