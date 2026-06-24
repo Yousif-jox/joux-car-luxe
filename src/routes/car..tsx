@@ -28,10 +28,12 @@ function CarDetail() {
   const [clientPhone, setPhone]   = useState("");
   const [toast, setToast]         = useState<string | null>(null);
   const [showRent, setShowRent]   = useState(false);
+  const [showBuy, setShowBuy]     = useState(false);
 
   useEffect(() => { setCars(loadCars()); }, []);
 
   const car = cars.find(c => c.id === id);
+  const features = car ? getCarFeatures(car) : [];
 
   function showToast(msg: string) {
     setToast(msg);
