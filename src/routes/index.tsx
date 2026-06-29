@@ -369,6 +369,36 @@ function Showroom() {
         </div>
       </section>
 
+      {/* Road Strip */}
+      <div
+        className="road-strip"
+        style={{
+          backgroundImage: "url('https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1600&auto=format&fit=crop')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        {[
+          { src: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=300&auto=format&fit=crop", alt: "BMW", height: 80, top: 20, duration: "12s", delay: "0s" },
+          { src: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=300&auto=format&fit=crop", alt: "Mercedes", height: 90, top: 60, duration: "15s", delay: "3s" },
+          { src: "https://images.unsplash.com/photo-1503376763036-066120622c74?w=300&auto=format&fit=crop", alt: "Porsche", height: 75, top: 35, duration: "10s", delay: "1.5s" },
+          { src: "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=300&auto=format&fit=crop", alt: "Toyota", height: 85, top: 90, duration: "18s", delay: "5s" },
+          { src: "https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=300&auto=format&fit=crop", alt: "Tesla", height: 70, top: 55, duration: "8s", delay: "7s" },
+        ].map((car, i) => (
+          <img
+            key={i}
+            src={car.src}
+            alt={car.alt}
+            className="road-car"
+            style={{
+              height: `${car.height}px`,
+              top: `${car.top}px`,
+              animation: `road-drive ${car.duration} linear ${car.delay} infinite`,
+            }}
+          />
+        ))}
+      </div>
+
       {/* Filters */}
       <section className="container mx-auto px-6 mb-4">
         <div className="card-luxury rounded-2xl p-6 grid md:grid-cols-2 lg:grid-cols-4 gap-6">
