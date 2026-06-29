@@ -96,6 +96,25 @@
   }
 }
 
+@keyframes road-drive {
+  0%   { transform: translateX(110vw); }
+  100% { transform: translateX(-150%); }
+}
+
+.road-strip {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 180px;
+}
+.road-car {
+  position: absolute;
+  object-fit: contain;
+  filter: drop-shadow(2px 4px 6px black);
+  background: transparent;
+  will-change: transform;
+}
+
 @keyframes car-drive-rtl {
   0%   { transform: translateX(110vw); opacity: 0; }
   10%  { opacity: 1; }
