@@ -330,6 +330,14 @@ function Showroom() {
     showToast(`🛒 تم بيع ${car.brand} ${car.model} للعميل ${clientName}`);
   }
 
+  function handleQuickEdit(updated: Car) {
+    const updatedCars = cars.map(c => c.id === updated.id ? updated : c);
+    setCars(updatedCars);
+    saveCars(updatedCars);
+    setSelectedCar(updated);
+    showToast(`✏️ تم تحديث ${updated.brand} ${updated.model}`);
+  }
+
   const brands = useMemo(() => ["الكل", ...Array.from(new Set(cars.map(c => c.brand)))], [cars]);
 
   const filtered = cars.filter(c =>
