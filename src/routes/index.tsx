@@ -14,6 +14,7 @@ export const Route = createFileRoute("/")({
 
 type RentPeriod = "يوم" | "أسبوع" | "شهر";
 const STATUSES: (CarStatus | "الكل")[] = ["الكل", "متاح", "محجوز", "مباع", "مؤجر"];
+const EDITABLE_STATUSES: CarStatus[] = ["متاح", "محجوز", "مباع", "مؤجر"];
 
 function statusBadge(s: CarStatus) {
   const map: Record<CarStatus, string> = {
@@ -26,11 +27,12 @@ function statusBadge(s: CarStatus) {
 }
 
 // ─── Modal ───────────────────────────────────────────────────────────────────
-function CarModal({ car, onClose, onRent, onBuy }: {
+function CarModal({ car, onClose, onRent, onBuy, onEdit }: {
   car: Car;
   onClose: () => void;
   onRent: (car: Car, period: RentPeriod, name: string, phone: string) => void;
   onBuy: (car: Car, name: string, phone: string) => void;
+  onEdit?: (updated: Car) => void;
 }) {
   const canBuy  = (car.listingType === "بيع"   || car.listingType === "بيع وإيجار") && car.status === "متاح";
   const canRent = (car.listingType === "إيجار" || car.listingType === "بيع وإيجار") && !!car.rental && car.status === "متاح";
@@ -39,6 +41,12 @@ function CarModal({ car, onClose, onRent, onBuy }: {
   const [period, setPeriod]     = useState<RentPeriod>("يوم");
   const [clientName, setName]   = useState("");
   const [clientPhone, setPhone] = useState("");
+
+  // quick-edit state
+  const [editMode, setEditMode] = useState(false);
+  const [editPrice, setEditPrice] = useState(car.price);
+  const [editColor, setEditColor] = useState(car.color);
+  const [editStatus, setEditStatus] = useState<CarStatus>(car.status);
 
   const rentalPrice = car.rental
     ? period === "يوم" ? car.rental.pricePerDay
@@ -58,6 +66,11 @@ function CarModal({ car, onClose, onRent, onBuy }: {
     onBuy(car, clientName.trim(), clientPhone.trim());
     onClose();
   }
+  function submitQuickEdit() {
+    if (!onEdit) return;
+    onEdit({ ...car, price: Number(editPrice) || car.price, color: editColor.trim() || car.color, status: editStatus });
+    setEditMode(false);
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
@@ -76,7 +89,12 @@ function CarModal({ car, onClose, onRent, onBuy }: {
         {/* عنوان */}
         <div className="px-6 pt-5 pb-3 flex items-baseline justify-between">
           <h2 className="text-xl font-bold">{car.brand} {car.model} <span className="text-muted-foreground text-sm font-normal">{car.year}</span></h2>
-          <span className="text-xs px-2 py-1 rounded-full border border-gold/30 text-gold">{car.listingType}</span>
+          <div className="flex items-center gap-2">
+            <button onClick={() => setEditMode(!editMode)} className="text-xs px-3 py-1.5 rounded-full border border-gold/40 text-gold hover:bg-gold/10 transition">
+              {editMode ? "إلغاء" : "✏️ تعديل سريع"}
+            </button>
+            <span className="text-xs px-2 py-1 rounded-full border border-gold/30 text-gold">{car.listingType}</span>
+          </div>
         </div>
 
         {/* تابز */}
@@ -105,6 +123,35 @@ function CarModal({ car, onClose, onRent, onBuy }: {
           {/* تاب التفاصيل */}
           {tab === "details" && (
             <div className="space-y-3">
+              {/* نموذج التعديل السريع */}
+              {editMode && (
+                <div className="rounded-xl border border-gold/30 bg-gold/5 p-4 space-y-3">
+                  <div className="text-xs text-muted-foreground mb-2 font-semibold">✏️ تعديل سريع</div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-xs text-muted-foreground mb-1 block">الحالة</label>
+                      <select value={editStatus} onChange={e => setEditStatus(e.target.value as CarStatus)}
+                        className="w-full bg-input border border-border rounded-lg px-3 py-2 text-sm focus:border-gold outline-none">
+                        {EDITABLE_STATUSES.map(s => <option key={s}>{s}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-xs text-muted-foreground mb-1 block">السعر (جنيه)</label>
+                      <input type="number" value={editPrice} onChange={e => setEditPrice(Number(e.target.value))}
+                        className="w-full bg-input border border-border rounded-lg px-3 py-2 text-sm focus:border-gold outline-none" dir="ltr" />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1 block">اللون</label>
+                    <input type="text" value={editColor} onChange={e => setEditColor(e.target.value)}
+                      className="w-full bg-input border border-border rounded-lg px-3 py-2 text-sm focus:border-gold outline-none" />
+                  </div>
+                  <button onClick={submitQuickEdit}
+                    className="w-full gold-gradient text-background font-bold py-2.5 rounded-xl hover:opacity-90 transition text-sm">
+                    💾 حفظ التعديلات
+                  </button>
+                </div>
+              )}
               <div className="grid grid-cols-2 gap-3 text-sm">
                 <div className="bg-secondary/50 rounded-xl p-3">
                   <div className="text-muted-foreground text-xs mb-1">الوقود</div>
@@ -283,6 +330,14 @@ function Showroom() {
     showToast(`🛒 تم بيع ${car.brand} ${car.model} للعميل ${clientName}`);
   }
 
+  function handleQuickEdit(updated: Car) {
+    const updatedCars = cars.map(c => c.id === updated.id ? updated : c);
+    setCars(updatedCars);
+    saveCars(updatedCars);
+    setSelectedCar(updated);
+    showToast(`✏️ تم تحديث ${updated.brand} ${updated.model}`);
+  }
+
   const brands = useMemo(() => ["الكل", ...Array.from(new Set(cars.map(c => c.brand)))], [cars]);
 
   const filtered = cars.filter(c =>
@@ -306,7 +361,7 @@ function Showroom() {
         </div>
       )}
 
-      {selectedCar && <CarModal car={selectedCar} onClose={() => setSelectedCar(null)} onRent={handleRent} onBuy={handleBuy} />}
+      {selectedCar && <CarModal car={selectedCar} onClose={() => setSelectedCar(null)} onRent={handleRent} onBuy={handleBuy} onEdit={handleQuickEdit} />}
 
       {/* Nav */}
       <header className="border-b border-border/50 backdrop-blur-md sticky top-0 z-50 bg-background/80">
