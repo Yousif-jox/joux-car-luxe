@@ -14,6 +14,7 @@ export const Route = createFileRoute("/")({
 
 type RentPeriod = "يوم" | "أسبوع" | "شهر";
 const STATUSES: (CarStatus | "الكل")[] = ["الكل", "متاح", "محجوز", "مباع", "مؤجر"];
+const EDITABLE_STATUSES: CarStatus[] = ["متاح", "محجوز", "مباع", "مؤجر"];
 
 function statusBadge(s: CarStatus) {
   const map: Record<CarStatus, string> = {
