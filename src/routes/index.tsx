@@ -27,11 +27,12 @@ function statusBadge(s: CarStatus) {
 }
 
 // ─── Modal ───────────────────────────────────────────────────────────────────
-function CarModal({ car, onClose, onRent, onBuy }: {
+function CarModal({ car, onClose, onRent, onBuy, onEdit }: {
   car: Car;
   onClose: () => void;
   onRent: (car: Car, period: RentPeriod, name: string, phone: string) => void;
   onBuy: (car: Car, name: string, phone: string) => void;
+  onEdit?: (updated: Car) => void;
 }) {
   const canBuy  = (car.listingType === "بيع"   || car.listingType === "بيع وإيجار") && car.status === "متاح";
   const canRent = (car.listingType === "إيجار" || car.listingType === "بيع وإيجار") && !!car.rental && car.status === "متاح";
@@ -40,6 +41,12 @@ function CarModal({ car, onClose, onRent, onBuy }: {
   const [period, setPeriod]     = useState<RentPeriod>("يوم");
   const [clientName, setName]   = useState("");
   const [clientPhone, setPhone] = useState("");
+
+  // quick-edit state
+  const [editMode, setEditMode] = useState(false);
+  const [editPrice, setEditPrice] = useState(car.price);
+  const [editColor, setEditColor] = useState(car.color);
+  const [editStatus, setEditStatus] = useState<CarStatus>(car.status);
 
   const rentalPrice = car.rental
     ? period === "يوم" ? car.rental.pricePerDay
@@ -58,6 +65,11 @@ function CarModal({ car, onClose, onRent, onBuy }: {
     if (!clientName.trim() || !clientPhone.trim()) { alert("من فضلك ادخل اسم المشتري ورقم الهاتف"); return; }
     onBuy(car, clientName.trim(), clientPhone.trim());
     onClose();
+  }
+  function submitQuickEdit() {
+    if (!onEdit) return;
+    onEdit({ ...car, price: Number(editPrice) || car.price, color: editColor.trim() || car.color, status: editStatus });
+    setEditMode(false);
   }
 
   return (
