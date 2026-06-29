@@ -89,7 +89,12 @@ function CarModal({ car, onClose, onRent, onBuy, onEdit }: {
         {/* عنوان */}
         <div className="px-6 pt-5 pb-3 flex items-baseline justify-between">
           <h2 className="text-xl font-bold">{car.brand} {car.model} <span className="text-muted-foreground text-sm font-normal">{car.year}</span></h2>
-          <span className="text-xs px-2 py-1 rounded-full border border-gold/30 text-gold">{car.listingType}</span>
+          <div className="flex items-center gap-2">
+            <button onClick={() => setEditMode(!editMode)} className="text-xs px-3 py-1.5 rounded-full border border-gold/40 text-gold hover:bg-gold/10 transition">
+              {editMode ? "إلغاء" : "✏️ تعديل سريع"}
+            </button>
+            <span className="text-xs px-2 py-1 rounded-full border border-gold/30 text-gold">{car.listingType}</span>
+          </div>
         </div>
 
         {/* تابز */}
