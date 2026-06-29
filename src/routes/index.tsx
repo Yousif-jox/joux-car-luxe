@@ -123,6 +123,35 @@ function CarModal({ car, onClose, onRent, onBuy, onEdit }: {
           {/* تاب التفاصيل */}
           {tab === "details" && (
             <div className="space-y-3">
+              {/* نموذج التعديل السريع */}
+              {editMode && (
+                <div className="rounded-xl border border-gold/30 bg-gold/5 p-4 space-y-3">
+                  <div className="text-xs text-muted-foreground mb-2 font-semibold">✏️ تعديل سريع</div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-xs text-muted-foreground mb-1 block">الحالة</label>
+                      <select value={editStatus} onChange={e => setEditStatus(e.target.value as CarStatus)}
+                        className="w-full bg-input border border-border rounded-lg px-3 py-2 text-sm focus:border-gold outline-none">
+                        {EDITABLE_STATUSES.map(s => <option key={s}>{s}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-xs text-muted-foreground mb-1 block">السعر (جنيه)</label>
+                      <input type="number" value={editPrice} onChange={e => setEditPrice(Number(e.target.value))}
+                        className="w-full bg-input border border-border rounded-lg px-3 py-2 text-sm focus:border-gold outline-none" dir="ltr" />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1 block">اللون</label>
+                    <input type="text" value={editColor} onChange={e => setEditColor(e.target.value)}
+                      className="w-full bg-input border border-border rounded-lg px-3 py-2 text-sm focus:border-gold outline-none" />
+                  </div>
+                  <button onClick={submitQuickEdit}
+                    className="w-full gold-gradient text-background font-bold py-2.5 rounded-xl hover:opacity-90 transition text-sm">
+                    💾 حفظ التعديلات
+                  </button>
+                </div>
+              )}
               <div className="grid grid-cols-2 gap-3 text-sm">
                 <div className="bg-secondary/50 rounded-xl p-3">
                   <div className="text-muted-foreground text-xs mb-1">الوقود</div>
