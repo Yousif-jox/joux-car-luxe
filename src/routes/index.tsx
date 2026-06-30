@@ -572,9 +572,37 @@ function Showroom() {
         )}
       </section>
 
-      <footer className="border-t border-border/50 py-8 text-center text-sm text-muted-foreground">
-        © {new Date().getFullYear()} معرض السيارات جوكس — جميع الحقوق محفوظة
+      <footer className="bg-[#1a1a1a] text-white/80 py-10">
+        <div className="container mx-auto px-6 grid md:grid-cols-3 gap-8 text-sm">
+          <div>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-lg gold-gradient flex items-center justify-center font-black text-xl">ج</div>
+              <span className="font-black text-white">معرض جوكس Auto Group</span>
+            </div>
+            <p className="opacity-70">وكيل معتمد لأفخم الماركات في مصر — بيع وإيجار وتمويل بأفضل الأسعار.</p>
+          </div>
+          <div>
+            <h4 className="font-bold text-white mb-3">روابط سريعة</h4>
+            <ul className="space-y-2 opacity-80">
+              <li><a href="#cars" className="hover:text-[#ff7a18]">السيارات الجديدة</a></li>
+              <li><a href="#search" className="hover:text-[#ff7a18]">البحث المتقدم</a></li>
+              <li><Link to="/dashboard" className="hover:text-[#ff7a18]">لوحة التحكم</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold text-white mb-3">تواصل معنا</h4>
+            <ul className="space-y-2 opacity-80">
+              <li>📞 16227</li>
+              <li>📍 القاهرة — مصر</li>
+              <li>🕐 خدمة 24/7</li>
+            </ul>
+          </div>
+        </div>
+        <div className="container mx-auto px-6 mt-8 pt-6 border-t border-white/10 text-center text-xs opacity-60">
+          © {new Date().getFullYear()} معرض السيارات جوكس — جميع الحقوق محفوظة
+        </div>
       </footer>
+
     </div>
   );
 }
