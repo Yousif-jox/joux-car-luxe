@@ -18,13 +18,15 @@ const EDITABLE_STATUSES: CarStatus[] = ["متاح", "محجوز", "مباع", "�
 
 function statusBadge(s: CarStatus) {
   const map: Record<CarStatus, string> = {
-    "متاح":  "bg-emerald-500/15 text-emerald-300 border-emerald-500/30",
-    "محجوز": "bg-amber-500/15  text-amber-300  border-amber-500/30",
-    "مباع":  "bg-rose-500/15   text-rose-300   border-rose-500/30",
-    "مؤجر":  "bg-blue-500/15   text-blue-300   border-blue-500/30",
+    "متاح":  "bg-emerald-100 text-emerald-700 border-emerald-300",
+    "محجوز": "bg-amber-100  text-amber-700  border-amber-300",
+    "مباع":  "bg-rose-100   text-rose-700   border-rose-300",
+    "مؤجر":  "bg-blue-100   text-blue-700   border-blue-300",
   };
   return map[s];
 }
+
+const BRAND_LOGOS = ["Toyota","Kia","Hyundai","BMW","Mercedes","Nissan","Audi","Porsche","Lexus","Ford","Chevrolet","Honda","Jeep","Volkswagen","Peugeot","Tesla"];
 
 // ─── Modal ───────────────────────────────────────────────────────────────────
 function CarModal({ car, onClose, onRent, onBuy, onEdit }: {
