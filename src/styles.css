@@ -35,27 +35,30 @@
 
 :root {
   --radius: 0.75rem;
-  --background: oklch(0.13 0.005 280);
-  --foreground: oklch(0.96 0.01 90);
-  --card: oklch(0.17 0.008 280);
-  --card-foreground: oklch(0.96 0.01 90);
-  --popover: oklch(0.17 0.008 280);
-  --popover-foreground: oklch(0.96 0.01 90);
-  --primary: oklch(0.78 0.13 85);
-  --primary-foreground: oklch(0.13 0.005 280);
-  --secondary: oklch(0.22 0.01 280);
-  --secondary-foreground: oklch(0.96 0.01 90);
-  --muted: oklch(0.22 0.01 280);
-  --muted-foreground: oklch(0.7 0.02 90);
-  --accent: oklch(0.78 0.13 85);
-  --accent-foreground: oklch(0.13 0.005 280);
+  --background: oklch(0.99 0.003 80);
+  --foreground: oklch(0.18 0.02 30);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.18 0.02 30);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.18 0.02 30);
+  --primary: oklch(0.72 0.19 45);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.96 0.01 60);
+  --secondary-foreground: oklch(0.18 0.02 30);
+  --muted: oklch(0.96 0.01 60);
+  --muted-foreground: oklch(0.5 0.02 30);
+  --accent: oklch(0.72 0.19 45);
+  --accent-foreground: oklch(1 0 0);
   --destructive: oklch(0.6 0.22 25);
   --destructive-foreground: oklch(0.98 0 0);
-  --border: oklch(0.28 0.01 280);
-  --input: oklch(0.22 0.01 280);
-  --ring: oklch(0.78 0.13 85);
-  --gold: oklch(0.78 0.13 85);
-  --gold-soft: oklch(0.65 0.1 85);
+  --border: oklch(0.9 0.01 60);
+  --input: oklch(1 0 0);
+  --ring: oklch(0.72 0.19 45);
+  --gold: oklch(0.66 0.21 42);
+  --gold-soft: oklch(0.78 0.16 50);
+  --orange-1: #ff7a18;
+  --orange-2: #f4511e;
+  --orange-3: #ffb066;
 }
 
 .dark { }
@@ -68,32 +71,40 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     background-image:
-      radial-gradient(circle at 15% 10%, oklch(0.78 0.13 85 / 0.08), transparent 40%),
-      radial-gradient(circle at 85% 80%, oklch(0.78 0.13 85 / 0.05), transparent 45%);
+      radial-gradient(circle at 10% -10%, oklch(0.72 0.19 45 / 0.10), transparent 45%),
+      radial-gradient(circle at 100% 0%, oklch(0.78 0.16 50 / 0.08), transparent 40%);
     min-height: 100vh;
   }
 }
 
 @utility gold-gradient {
-  background: linear-gradient(135deg, #E8C76A 0%, #C9A84C 50%, #8B7330 100%);
+  background: linear-gradient(135deg, var(--orange-1) 0%, var(--orange-2) 100%);
+  color: #fff;
 }
 @utility text-gold-gradient {
-  background: linear-gradient(135deg, #E8C76A 0%, #C9A84C 100%);
+  background: linear-gradient(135deg, var(--orange-1) 0%, var(--orange-2) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 @utility card-luxury {
-  background: linear-gradient(180deg, oklch(0.19 0.008 280) 0%, oklch(0.15 0.008 280) 100%);
-  border: 1px solid oklch(0.78 0.13 85 / 0.15);
-  transition: all 0.3s ease;
+  background: #ffffff;
+  border: 1px solid oklch(0.9 0.01 60);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  transition: all 0.25s ease;
 }
 @utility card-luxury-hover {
   &:hover {
-    border-color: oklch(0.78 0.13 85 / 0.5);
-    box-shadow: 0 20px 50px -10px oklch(0.78 0.13 85 / 0.2);
+    border-color: var(--orange-2);
+    box-shadow: 0 18px 40px -18px rgba(244, 81, 30, 0.35);
     transform: translateY(-4px);
   }
+}
+@utility hero-banner {
+  background:
+    radial-gradient(ellipse at 30% 90%, rgba(255,255,255,0.25), transparent 60%),
+    linear-gradient(120deg, #ff8a3d 0%, #f4511e 55%, #c2410c 100%);
+  color: #fff;
 }
 
 @keyframes car-drive-rtl {
@@ -113,5 +124,14 @@
 }
 .hero-cars span {
   position: absolute; display: block; will-change: transform;
-  filter: drop-shadow(0 4px 12px rgba(201, 168, 76, 0.25));
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.25));
+}
+
+@keyframes marquee-rtl {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(50%); }
+}
+.brand-marquee {
+  display: flex; gap: 3rem; width: max-content;
+  animation: marquee-rtl 30s linear infinite;
 }

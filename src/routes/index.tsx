@@ -18,13 +18,15 @@ const EDITABLE_STATUSES: CarStatus[] = ["متاح", "محجوز", "مباع", "�
 
 function statusBadge(s: CarStatus) {
   const map: Record<CarStatus, string> = {
-    "متاح":  "bg-emerald-500/15 text-emerald-300 border-emerald-500/30",
-    "محجوز": "bg-amber-500/15  text-amber-300  border-amber-500/30",
-    "مباع":  "bg-rose-500/15   text-rose-300   border-rose-500/30",
-    "مؤجر":  "bg-blue-500/15   text-blue-300   border-blue-500/30",
+    "متاح":  "bg-emerald-100 text-emerald-700 border-emerald-300",
+    "محجوز": "bg-amber-100  text-amber-700  border-amber-300",
+    "مباع":  "bg-rose-100   text-rose-700   border-rose-300",
+    "مؤجر":  "bg-blue-100   text-blue-700   border-blue-300",
   };
   return map[s];
 }
+
+const BRAND_LOGOS = ["Toyota","Kia","Hyundai","BMW","Mercedes","Nissan","Audi","Porsche","Lexus","Ford","Chevrolet","Honda","Jeep","Volkswagen","Peugeot","Tesla"];
 
 // ─── Modal ───────────────────────────────────────────────────────────────────
 function CarModal({ car, onClose, onRent, onBuy, onEdit }: {
@@ -363,22 +365,41 @@ function Showroom() {
 
       {selectedCar && <CarModal car={selectedCar} onClose={() => setSelectedCar(null)} onRent={handleRent} onBuy={handleBuy} onEdit={handleQuickEdit} />}
 
-      {/* Nav */}
-      <header className="border-b border-border/50 backdrop-blur-md sticky top-0 z-50 bg-background/80">
-        <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg gold-gradient flex items-center justify-center font-black text-background text-xl">ج</div>
-            <span className="font-bold text-lg">معرض جوكس</span>
+      {/* Top contact bar */}
+      <div className="bg-[#1a1a1a] text-white text-xs">
+        <div className="container mx-auto px-6 py-2 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <span>📞 16227</span>
+            <span className="hidden sm:inline opacity-70">خدمة عملاء على مدار الساعة</span>
           </div>
-          <Link to="/dashboard" className="text-sm px-4 py-2 rounded-lg border border-gold/40 text-gold hover:bg-gold/10 transition">
-            لوحة التحكم
-          </Link>
+          <div className="opacity-70 hidden sm:block">القاهرة — مصر</div>
+        </div>
+      </div>
+
+      {/* Nav (orange) */}
+      <header className="hero-banner sticky top-0 z-50 shadow-lg">
+        <div className="container mx-auto px-6 py-3 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-lg bg-white text-[#f4511e] flex items-center justify-center font-black text-xl shadow-md">ج</div>
+            <div>
+              <div className="font-black text-lg leading-tight">معرض جوكس</div>
+              <div className="text-[10px] opacity-90 -mt-0.5">Auto Group</div>
+            </div>
+          </div>
+          <nav className="hidden md:flex items-center gap-6 text-sm font-semibold">
+            <a href="#cars" className="hover:opacity-80">السيارات</a>
+            <a href="#search" className="hover:opacity-80">ابحث</a>
+            <a href="#brands" className="hover:opacity-80">الماركات</a>
+            <Link to="/dashboard" className="hover:opacity-80">لوحة التحكم</Link>
+          </nav>
+          <a href="#search" className="bg-white text-[#f4511e] text-xs font-bold px-4 py-2 rounded-full shadow hover:scale-105 transition">
+            🚗 اطلب سيارة
+          </a>
         </div>
       </header>
 
-      {/* Hero */}
-      <section className="relative overflow-hidden py-24 px-6">
-        {/* سيارات متحركة في الخلفية */}
+      {/* Hero — Ellaithy style finance offer */}
+      <section className="hero-banner relative overflow-hidden">
         <div className="hero-cars" aria-hidden="true">
           {[
             { emoji: "🚗", top: "12%", size: "3.5rem", duration: "18s", delay: "0s",   dir: "rtl" },
@@ -391,42 +412,62 @@ function Showroom() {
               style={{
                 top: c.top, fontSize: c.size,
                 animation: `${c.dir === "rtl" ? "car-drive-rtl" : "car-drive-ltr"} ${c.duration} linear ${c.delay} infinite`,
-                opacity: 0.18,
+                opacity: 0.22,
               }}>
               {c.emoji}
             </span>
           ))}
         </div>
-        {/* تدرج لإبراز النص فوق السيارات */}
-        <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/40 to-background/80 z-0 pointer-events-none" />
-        <div className="container mx-auto text-center relative z-10">
-          <div className="inline-block px-4 py-1.5 rounded-full border border-gold/30 text-gold text-xs mb-6 tracking-widest">★ معرض السيارات الفاخرة ★</div>
-          <h1 className="text-5xl md:text-7xl font-black mb-6 text-gold-gradient leading-tight">معرض السيارات جوكس</h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-            أفخم السيارات الجديدة والمستعملة بأفضل الأسعار في مصر — بيع وإيجار
-          </p>
-          <div className="mt-10 flex justify-center gap-8 text-center flex-wrap">
+        <div className="container mx-auto px-6 py-20 md:py-28 relative z-10 text-center">
+          <div className="inline-block bg-white/15 backdrop-blur px-4 py-1.5 rounded-full text-xs font-semibold mb-6 border border-white/30">
+            🎉 أقوى عروض التمويل في مصر
+          </div>
+          <div className="flex items-center justify-center gap-3 md:gap-6 mb-4 flex-wrap">
+            <span className="text-3xl md:text-5xl font-bold drop-shadow">فائدة</span>
+            <span className="text-7xl md:text-[10rem] font-black leading-none drop-shadow-lg" style={{textShadow:"0 6px 30px rgba(0,0,0,0.25)"}}>9.9<span className="text-4xl md:text-7xl align-top">%</span></span>
+          </div>
+          <p className="text-lg md:text-2xl font-semibold mb-2">على جميع السيارات الجديدة</p>
+          <p className="text-sm md:text-base opacity-90 mb-8">مقدم يبدأ من 30% • أقساط حتى 60 شهر • موافقة فورية</p>
+          <div className="flex justify-center gap-3 flex-wrap">
+            <a href="#search" className="bg-white text-[#f4511e] font-bold px-6 py-3 rounded-full shadow-lg hover:scale-105 transition">🔍 ابحث عن سيارتك</a>
+            <a href="#cars" className="bg-black/30 backdrop-blur border border-white/40 text-white font-bold px-6 py-3 rounded-full hover:bg-black/40 transition">تصفح المعرض</a>
+          </div>
+          <div className="mt-12 flex justify-center gap-6 md:gap-12 text-center flex-wrap">
             {[
-              { val: cars.length, label: "سيارة" },
+              { val: cars.length, label: "سيارة متوفرة" },
               { val: cars.filter(c => c.status === "متاح").length, label: "متاح للبيع" },
               { val: availableForRent, label: "متاح للإيجار" },
-              { val: brands.length - 1, label: "ماركة" },
+              { val: brands.length - 1, label: "ماركة عالمية" },
             ].map((s, i) => (
-              <div key={i} className="flex items-center gap-8">
-                {i > 0 && <div className="w-px h-8 bg-border" />}
-                <div>
-                  <div className="text-3xl font-bold text-gold">{s.val}</div>
-                  <div className="text-xs text-muted-foreground mt-1">{s.label}</div>
-                </div>
+              <div key={i}>
+                <div className="text-3xl md:text-4xl font-black">{s.val}</div>
+                <div className="text-xs opacity-90 mt-1">{s.label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
+      {/* Brand marquee */}
+      <section id="brands" className="bg-white border-y border-border py-5 overflow-hidden">
+        <div className="brand-marquee">
+          {[...BRAND_LOGOS, ...BRAND_LOGOS].map((b, i) => (
+            <span key={i} className="text-2xl font-black text-muted-foreground/60 whitespace-nowrap tracking-wider">
+              {b}
+            </span>
+          ))}
+        </div>
+      </section>
+
+
       {/* Filters */}
-      <section className="container mx-auto px-6 mb-4">
-        <div className="card-luxury rounded-2xl p-6 grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <section id="search" className="container mx-auto px-6 mt-10 mb-4">
+        <div className="text-center mb-6">
+          <h2 className="text-3xl font-black text-foreground">البحث عن سيارتك</h2>
+          <div className="w-16 h-1 gold-gradient rounded-full mx-auto mt-2"></div>
+        </div>
+        <div className="card-luxury rounded-2xl p-6 grid md:grid-cols-2 lg:grid-cols-4 gap-6 border-2 border-[#f4511e]/30">
+
           <div>
             <label className="text-xs text-muted-foreground mb-2 block">بحث</label>
             <input type="text" value={query} onChange={e => setQuery(e.target.value)}
@@ -471,8 +512,13 @@ function Showroom() {
       </section>
 
       {/* Grid */}
-      <section className="container mx-auto px-6 pb-24">
-        <p className="text-xs text-muted-foreground mb-4">{filtered.length} سيارة</p>
+      <section id="cars" className="container mx-auto px-6 pb-24 pt-8">
+        <div className="flex items-end justify-between mb-6">
+          <div>
+            <h2 className="text-2xl font-black">السيارات المتاحة</h2>
+            <p className="text-xs text-muted-foreground mt-1">{filtered.length} سيارة معروضة</p>
+          </div>
+        </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map(car => {
             const hasRent = (car.listingType === "إيجار" || car.listingType === "بيع وإيجار") && !!car.rental;
@@ -483,10 +529,11 @@ function Showroom() {
                 <div className="aspect-[16/10] bg-secondary relative overflow-hidden">
                   {car.image
                     ? <img src={car.image} alt={`${car.brand} ${car.model}`} loading="lazy" className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
-                    : <div className="w-full h-full flex items-center justify-center text-gold/30 text-6xl">🚗</div>}
+                    : <div className="w-full h-full flex items-center justify-center text-[#f4511e]/30 text-6xl">🚗</div>}
                   <div className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs border ${statusBadge(car.status)}`}>{car.status}</div>
-                  <div className="absolute top-3 left-3 px-2 py-1 rounded-full text-xs border border-gold/30 bg-black/50 text-gold">{car.listingType}</div>
+                  <div className="absolute top-3 left-3 px-2 py-1 rounded-full text-xs gold-gradient font-semibold shadow">{car.listingType}</div>
                 </div>
+
                 <div className="p-5">
                   <div className="flex items-baseline justify-between mb-2">
                     <h3 className="font-bold text-lg">{car.brand} {car.model}</h3>
@@ -525,9 +572,37 @@ function Showroom() {
         )}
       </section>
 
-      <footer className="border-t border-border/50 py-8 text-center text-sm text-muted-foreground">
-        © {new Date().getFullYear()} معرض السيارات جوكس — جميع الحقوق محفوظة
+      <footer className="bg-[#1a1a1a] text-white/80 py-10">
+        <div className="container mx-auto px-6 grid md:grid-cols-3 gap-8 text-sm">
+          <div>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-lg gold-gradient flex items-center justify-center font-black text-xl">ج</div>
+              <span className="font-black text-white">معرض جوكس Auto Group</span>
+            </div>
+            <p className="opacity-70">وكيل معتمد لأفخم الماركات في مصر — بيع وإيجار وتمويل بأفضل الأسعار.</p>
+          </div>
+          <div>
+            <h4 className="font-bold text-white mb-3">روابط سريعة</h4>
+            <ul className="space-y-2 opacity-80">
+              <li><a href="#cars" className="hover:text-[#ff7a18]">السيارات الجديدة</a></li>
+              <li><a href="#search" className="hover:text-[#ff7a18]">البحث المتقدم</a></li>
+              <li><Link to="/dashboard" className="hover:text-[#ff7a18]">لوحة التحكم</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold text-white mb-3">تواصل معنا</h4>
+            <ul className="space-y-2 opacity-80">
+              <li>📞 16227</li>
+              <li>📍 القاهرة — مصر</li>
+              <li>🕐 خدمة 24/7</li>
+            </ul>
+          </div>
+        </div>
+        <div className="container mx-auto px-6 mt-8 pt-6 border-t border-white/10 text-center text-xs opacity-60">
+          © {new Date().getFullYear()} معرض السيارات جوكس — جميع الحقوق محفوظة
+        </div>
       </footer>
+
     </div>
   );
 }
