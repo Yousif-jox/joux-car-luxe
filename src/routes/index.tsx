@@ -461,8 +461,13 @@ function Showroom() {
 
 
       {/* Filters */}
-      <section className="container mx-auto px-6 mb-4">
-        <div className="card-luxury rounded-2xl p-6 grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <section id="search" className="container mx-auto px-6 mt-10 mb-4">
+        <div className="text-center mb-6">
+          <h2 className="text-3xl font-black text-foreground">البحث عن سيارتك</h2>
+          <div className="w-16 h-1 gold-gradient rounded-full mx-auto mt-2"></div>
+        </div>
+        <div className="card-luxury rounded-2xl p-6 grid md:grid-cols-2 lg:grid-cols-4 gap-6 border-2 border-[#f4511e]/30">
+
           <div>
             <label className="text-xs text-muted-foreground mb-2 block">بحث</label>
             <input type="text" value={query} onChange={e => setQuery(e.target.value)}
