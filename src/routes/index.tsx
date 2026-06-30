@@ -512,8 +512,13 @@ function Showroom() {
       </section>
 
       {/* Grid */}
-      <section className="container mx-auto px-6 pb-24">
-        <p className="text-xs text-muted-foreground mb-4">{filtered.length} سيارة</p>
+      <section id="cars" className="container mx-auto px-6 pb-24 pt-8">
+        <div className="flex items-end justify-between mb-6">
+          <div>
+            <h2 className="text-2xl font-black">السيارات المتاحة</h2>
+            <p className="text-xs text-muted-foreground mt-1">{filtered.length} سيارة معروضة</p>
+          </div>
+        </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map(car => {
             const hasRent = (car.listingType === "إيجار" || car.listingType === "بيع وإيجار") && !!car.rental;
@@ -524,10 +529,11 @@ function Showroom() {
                 <div className="aspect-[16/10] bg-secondary relative overflow-hidden">
                   {car.image
                     ? <img src={car.image} alt={`${car.brand} ${car.model}`} loading="lazy" className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
-                    : <div className="w-full h-full flex items-center justify-center text-gold/30 text-6xl">🚗</div>}
+                    : <div className="w-full h-full flex items-center justify-center text-[#f4511e]/30 text-6xl">🚗</div>}
                   <div className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs border ${statusBadge(car.status)}`}>{car.status}</div>
-                  <div className="absolute top-3 left-3 px-2 py-1 rounded-full text-xs border border-gold/30 bg-black/50 text-gold">{car.listingType}</div>
+                  <div className="absolute top-3 left-3 px-2 py-1 rounded-full text-xs gold-gradient font-semibold shadow">{car.listingType}</div>
                 </div>
+
                 <div className="p-5">
                   <div className="flex items-baseline justify-between mb-2">
                     <h3 className="font-bold text-lg">{car.brand} {car.model}</h3>
