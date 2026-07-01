@@ -47,9 +47,10 @@ function CarDetail() {
       showToast("⚠ من فضلك ادخل اسم العميل ورقم الهاتف");
       return;
     }
-    const price = period === "يوم" ? car.rental.pricePerDay
+    const unit = period === "يوم" ? car.rental.pricePerDay
       : period === "أسبوع" ? car.rental.pricePerWeek
       : car.rental.pricePerMonth;
+    const qty = Math.max(1, Math.floor(quantity) || 1);
 
     const updatedCars = cars.map(c => c.id === car.id ? { ...c, status: "مؤجر" as CarStatus } : c);
     setCars(updatedCars);
@@ -62,12 +63,13 @@ function CarDetail() {
       clientName: clientName.trim(),
       clientPhone: clientPhone.trim(),
       period,
-      totalPrice: price,
+      quantity: qty,
+      totalPrice: unit * qty,
       date: new Date().toLocaleDateString("ar-EG"),
     };
     saveRentals([...loadRentals(), record]);
     setName(""); setPhone(""); setShowRent(false);
-    showToast(`✓ تم تأجير السيارة للعميل ${clientName.trim()}`);
+    showToast(`✓ تم تأجير السيارة للعميل ${clientName.trim()} — ${qty} ${period}`);
   }
 
   function handleBuy() {
