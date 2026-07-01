@@ -32,7 +32,7 @@ const BRAND_LOGOS = ["Toyota","Kia","Hyundai","BMW","Mercedes","Nissan","Audi","
 function CarModal({ car, onClose, onRent, onBuy, onEdit }: {
   car: Car;
   onClose: () => void;
-  onRent: (car: Car, period: RentPeriod, name: string, phone: string) => void;
+  onRent: (car: Car, period: RentPeriod, quantity: number, name: string, phone: string) => void;
   onBuy: (car: Car, name: string, phone: string) => void;
   onEdit?: (updated: Car) => void;
 }) {
@@ -41,6 +41,7 @@ function CarModal({ car, onClose, onRent, onBuy, onEdit }: {
 
   const [tab, setTab]           = useState<"details" | "buy" | "rent">("details");
   const [period, setPeriod]     = useState<RentPeriod>("يوم");
+  const [quantity, setQuantity] = useState<number>(1);
   const [clientName, setName]   = useState("");
   const [clientPhone, setPhone] = useState("");
 
@@ -50,17 +51,19 @@ function CarModal({ car, onClose, onRent, onBuy, onEdit }: {
   const [editColor, setEditColor] = useState(car.color);
   const [editStatus, setEditStatus] = useState<CarStatus>(car.status);
 
-  const rentalPrice = car.rental
+  const unitPrice = car.rental
     ? period === "يوم" ? car.rental.pricePerDay
     : period === "أسبوع" ? car.rental.pricePerWeek
     : car.rental.pricePerMonth
     : 0;
+  const safeQty = Math.max(1, Math.floor(quantity) || 1);
+  const rentalPrice = unitPrice * safeQty;
 
   const features = getCarFeatures(car);
 
   function submitRent() {
     if (!clientName.trim() || !clientPhone.trim()) { alert("من فضلك ادخل اسم العميل ورقم الهاتف"); return; }
-    onRent(car, period, clientName.trim(), clientPhone.trim());
+    onRent(car, period, safeQty, clientName.trim(), clientPhone.trim());
     onClose();
   }
   function submitBuy() {
