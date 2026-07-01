@@ -196,7 +196,7 @@ function CarModal({ car, onClose, onRent, onBuy, onEdit }: {
               {canBuy && (
                 <button onClick={() => setTab("buy")}
                   className="w-full gold-gradient text-background font-bold py-3 rounded-xl hover:opacity-90 transition text-sm">
-                  🛒 اشتري الآن
+                      اشتري الآن
                 </button>
               )}
             </div>
@@ -559,7 +559,7 @@ function Showroom() {
                   {canBuy && (
                     <button onClick={e => { e.stopPropagation(); setSelectedCar(car); }}
                       className="mt-3 w-full py-2.5 rounded-xl gold-gradient text-background text-sm font-bold hover:opacity-90 transition flex items-center justify-center gap-2">
-                      🛒 اشتري الآن
+                      اشتري الآن
                     </button>
                   )}
                 </div>
