@@ -116,11 +116,13 @@ function CarDetail() {
   const canRent = (car.listingType === "إيجار" || car.listingType === "بيع وإيجار") && !!car.rental && car.status === "متاح";
   const canBuy  = (car.listingType === "بيع"  || car.listingType === "بيع وإيجار");
 
-  const rentalPrice = car.rental
+  const unitRentPrice = car.rental
     ? period === "يوم" ? car.rental.pricePerDay
     : period === "أسبوع" ? car.rental.pricePerWeek
     : car.rental.pricePerMonth
     : 0;
+  const safeQty = Math.max(1, Math.floor(quantity) || 1);
+  const rentalPrice = unitRentPrice * safeQty;
 
   return (
     <div className="min-h-screen">
