@@ -32,7 +32,7 @@ const BRAND_LOGOS = ["Toyota","Kia","Hyundai","BMW","Mercedes","Nissan","Audi","
 function CarModal({ car, onClose, onRent, onBuy, onEdit }: {
   car: Car;
   onClose: () => void;
-  onRent: (car: Car, period: RentPeriod, quantity: number, name: string, phone: string) => void;
+  onRent: (car: Car, period: RentPeriod, quantity: number, name: string, phone: string, startDate: string, endDate: string) => void;
   onBuy: (car: Car, name: string, phone: string) => void;
   onEdit?: (updated: Car) => void;
 }) {
@@ -41,7 +41,8 @@ function CarModal({ car, onClose, onRent, onBuy, onEdit }: {
 
   const [tab, setTab]           = useState<"details" | "buy" | "rent">("details");
   const [period, setPeriod]     = useState<RentPeriod>("يوم");
-  const [quantity, setQuantity] = useState<number>(1);
+  const [startDate, setStartDate] = useState<string>(() => new Date().toISOString().slice(0, 10));
+  const [endDate, setEndDate]     = useState<string>("");
   const [clientName, setName]   = useState("");
   const [clientPhone, setPhone] = useState("");
 
@@ -56,14 +57,26 @@ function CarModal({ car, onClose, onRent, onBuy, onEdit }: {
     : period === "أسبوع" ? car.rental.pricePerWeek
     : car.rental.pricePerMonth
     : 0;
-  const safeQty = Math.max(1, Math.floor(quantity) || 1);
+
+  // احسب عدد الوحدات من التاريخين
+  const daysBetween = (() => {
+    if (!startDate || !endDate) return 0;
+    const s = new Date(startDate).getTime();
+    const e = new Date(endDate).getTime();
+    if (isNaN(s) || isNaN(e) || e < s) return 0;
+    return Math.floor((e - s) / (1000 * 60 * 60 * 24)) + 1; // inclusive
+  })();
+  const unitDivisor = period === "يوم" ? 1 : period === "أسبوع" ? 7 : 30;
+  const safeQty = Math.max(1, Math.ceil(daysBetween / unitDivisor) || 1);
   const rentalPrice = unitPrice * safeQty;
 
   const features = getCarFeatures(car);
 
   function submitRent() {
     if (!clientName.trim() || !clientPhone.trim()) { alert("من فضلك ادخل اسم العميل ورقم الهاتف"); return; }
-    onRent(car, period, safeQty, clientName.trim(), clientPhone.trim());
+    if (!startDate || !endDate) { alert("من فضلك حدد تاريخ بداية ونهاية الإيجار"); return; }
+    if (new Date(endDate) < new Date(startDate)) { alert("تاريخ النهاية يجب أن يكون بعد تاريخ البداية"); return; }
+    onRent(car, period, safeQty, clientName.trim(), clientPhone.trim(), startDate, endDate);
     onClose();
   }
   function submitBuy() {
@@ -247,27 +260,30 @@ function CarModal({ car, onClose, onRent, onBuy, onEdit }: {
                   ))}
                 </div>
               </div>
-              <div>
-                <label className="text-xs text-muted-foreground mb-2 block">
-                  عدد {period === "يوم" ? "الأيام" : period === "أسبوع" ? "الأسابيع" : "الشهور"} (حددها بنفسك)
-                </label>
-                <div className="flex items-center gap-2">
-                  <button type="button" onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                    className="w-11 h-11 rounded-xl border border-border hover:border-gold/50 text-lg font-bold">−</button>
-                  <input type="number" min={1} max={365} value={quantity}
-                    onChange={e => setQuantity(Number(e.target.value))}
-                    className="flex-1 text-center bg-input border border-border rounded-xl px-4 py-2.5 text-lg font-bold focus:border-gold outline-none transition" />
-                  <button type="button" onClick={() => setQuantity(q => q + 1)}
-                    className="w-11 h-11 rounded-xl border border-border hover:border-gold/50 text-lg font-bold">+</button>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs text-muted-foreground mb-1.5 block">📅 من تاريخ</label>
+                  <input type="date" value={startDate} min={new Date().toISOString().slice(0, 10)}
+                    onChange={e => setStartDate(e.target.value)}
+                    className="w-full bg-input border border-border rounded-xl px-3 py-2.5 text-sm focus:border-gold outline-none transition" />
                 </div>
-                <div className="text-[11px] text-muted-foreground mt-1.5">
-                  السعر لكل {period}: {formatEGP(unitPrice)}
+                <div>
+                  <label className="text-xs text-muted-foreground mb-1.5 block">📅 إلى تاريخ</label>
+                  <input type="date" value={endDate} min={startDate || new Date().toISOString().slice(0, 10)}
+                    onChange={e => setEndDate(e.target.value)}
+                    className="w-full bg-input border border-border rounded-xl px-3 py-2.5 text-sm focus:border-gold outline-none transition" />
                 </div>
+              </div>
+              <div className="text-[11px] text-muted-foreground -mt-1">
+                السعر لكل {period}: {formatEGP(unitPrice)}
+                {daysBetween > 0 && <> — إجمالي المدة: {daysBetween} يوم ({safeQty} {period})</>}
               </div>
               <div className="rounded-xl border border-gold/30 bg-gold/5 p-4 text-center">
                 <div className="text-xs text-muted-foreground mb-1">إجمالي الإيجار</div>
                 <div className="text-2xl font-black text-gold">{formatEGP(rentalPrice)}</div>
-                <div className="text-xs text-muted-foreground mt-1">لمدة {safeQty} {period}</div>
+                <div className="text-xs text-muted-foreground mt-1">
+                  {daysBetween > 0 ? `من ${startDate} إلى ${endDate}` : `لمدة ${safeQty} ${period}`}
+                </div>
               </div>
               <div className="space-y-3">
                 <div>
@@ -312,7 +328,7 @@ function Showroom() {
     setTimeout(() => setToast(null), 3500);
   }
 
-  function handleRent(car: Car, period: RentPeriod, quantity: number, clientName: string, clientPhone: string) {
+  function handleRent(car: Car, period: RentPeriod, quantity: number, clientName: string, clientPhone: string, startDate: string, endDate: string) {
     // تحديث حالة السيارة
     const updatedCars = cars.map(c => c.id === car.id ? { ...c, status: "مؤجر" as CarStatus } : c);
     setCars(updatedCars);
@@ -331,10 +347,12 @@ function Showroom() {
       quantity: qty,
       totalPrice: unit * qty,
       date: new Date().toLocaleDateString("ar-EG"),
+      startDate,
+      endDate,
     };
     const rentals = loadRentals();
     saveRentals([...rentals, record]);
-    showToast(`✓ تم تأجير ${car.brand} ${car.model} للعميل ${clientName} — ${qty} ${period}`);
+    showToast(`✓ تم تأجير ${car.brand} ${car.model} للعميل ${clientName} من ${startDate} إلى ${endDate}`);
   }
 
   function handleBuy(car: Car, clientName: string, clientPhone: string) {
