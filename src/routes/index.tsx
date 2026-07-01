@@ -32,7 +32,7 @@ const BRAND_LOGOS = ["Toyota","Kia","Hyundai","BMW","Mercedes","Nissan","Audi","
 function CarModal({ car, onClose, onRent, onBuy, onEdit }: {
   car: Car;
   onClose: () => void;
-  onRent: (car: Car, period: RentPeriod, name: string, phone: string) => void;
+  onRent: (car: Car, period: RentPeriod, quantity: number, name: string, phone: string) => void;
   onBuy: (car: Car, name: string, phone: string) => void;
   onEdit?: (updated: Car) => void;
 }) {
@@ -41,6 +41,7 @@ function CarModal({ car, onClose, onRent, onBuy, onEdit }: {
 
   const [tab, setTab]           = useState<"details" | "buy" | "rent">("details");
   const [period, setPeriod]     = useState<RentPeriod>("يوم");
+  const [quantity, setQuantity] = useState<number>(1);
   const [clientName, setName]   = useState("");
   const [clientPhone, setPhone] = useState("");
 
@@ -50,17 +51,19 @@ function CarModal({ car, onClose, onRent, onBuy, onEdit }: {
   const [editColor, setEditColor] = useState(car.color);
   const [editStatus, setEditStatus] = useState<CarStatus>(car.status);
 
-  const rentalPrice = car.rental
+  const unitPrice = car.rental
     ? period === "يوم" ? car.rental.pricePerDay
     : period === "أسبوع" ? car.rental.pricePerWeek
     : car.rental.pricePerMonth
     : 0;
+  const safeQty = Math.max(1, Math.floor(quantity) || 1);
+  const rentalPrice = unitPrice * safeQty;
 
   const features = getCarFeatures(car);
 
   function submitRent() {
     if (!clientName.trim() || !clientPhone.trim()) { alert("من فضلك ادخل اسم العميل ورقم الهاتف"); return; }
-    onRent(car, period, clientName.trim(), clientPhone.trim());
+    onRent(car, period, safeQty, clientName.trim(), clientPhone.trim());
     onClose();
   }
   function submitBuy() {
@@ -234,7 +237,7 @@ function CarModal({ car, onClose, onRent, onBuy, onEdit }: {
           {tab === "rent" && canRent && car.rental && (
             <div className="space-y-4">
               <div>
-                <label className="text-xs text-muted-foreground mb-2 block">فترة الإيجار</label>
+                <label className="text-xs text-muted-foreground mb-2 block">نوع الفترة</label>
                 <div className="grid grid-cols-3 gap-2">
                   {(["يوم", "أسبوع", "شهر"] as RentPeriod[]).map(p => (
                     <button key={p} onClick={() => setPeriod(p)}
@@ -244,10 +247,27 @@ function CarModal({ car, onClose, onRent, onBuy, onEdit }: {
                   ))}
                 </div>
               </div>
+              <div>
+                <label className="text-xs text-muted-foreground mb-2 block">
+                  عدد {period === "يوم" ? "الأيام" : period === "أسبوع" ? "الأسابيع" : "الشهور"} (حددها بنفسك)
+                </label>
+                <div className="flex items-center gap-2">
+                  <button type="button" onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                    className="w-11 h-11 rounded-xl border border-border hover:border-gold/50 text-lg font-bold">−</button>
+                  <input type="number" min={1} max={365} value={quantity}
+                    onChange={e => setQuantity(Number(e.target.value))}
+                    className="flex-1 text-center bg-input border border-border rounded-xl px-4 py-2.5 text-lg font-bold focus:border-gold outline-none transition" />
+                  <button type="button" onClick={() => setQuantity(q => q + 1)}
+                    className="w-11 h-11 rounded-xl border border-border hover:border-gold/50 text-lg font-bold">+</button>
+                </div>
+                <div className="text-[11px] text-muted-foreground mt-1.5">
+                  السعر لكل {period}: {formatEGP(unitPrice)}
+                </div>
+              </div>
               <div className="rounded-xl border border-gold/30 bg-gold/5 p-4 text-center">
                 <div className="text-xs text-muted-foreground mb-1">إجمالي الإيجار</div>
                 <div className="text-2xl font-black text-gold">{formatEGP(rentalPrice)}</div>
-                <div className="text-xs text-muted-foreground mt-1">لمدة {period}</div>
+                <div className="text-xs text-muted-foreground mt-1">لمدة {safeQty} {period}</div>
               </div>
               <div className="space-y-3">
                 <div>
@@ -292,14 +312,15 @@ function Showroom() {
     setTimeout(() => setToast(null), 3500);
   }
 
-  function handleRent(car: Car, period: RentPeriod, clientName: string, clientPhone: string) {
+  function handleRent(car: Car, period: RentPeriod, quantity: number, clientName: string, clientPhone: string) {
     // تحديث حالة السيارة
     const updatedCars = cars.map(c => c.id === car.id ? { ...c, status: "مؤجر" as CarStatus } : c);
     setCars(updatedCars);
     saveCars(updatedCars);
 
     // حفظ عقد الإيجار
-    const price = period === "يوم" ? car.rental!.pricePerDay : period === "أسبوع" ? car.rental!.pricePerWeek : car.rental!.pricePerMonth;
+    const unit = period === "يوم" ? car.rental!.pricePerDay : period === "أسبوع" ? car.rental!.pricePerWeek : car.rental!.pricePerMonth;
+    const qty = Math.max(1, Math.floor(quantity) || 1);
     const record: RentalRecord = {
       id: Date.now().toString(),
       carId: car.id,
@@ -307,12 +328,13 @@ function Showroom() {
       clientName,
       clientPhone,
       period,
-      totalPrice: price,
+      quantity: qty,
+      totalPrice: unit * qty,
       date: new Date().toLocaleDateString("ar-EG"),
     };
     const rentals = loadRentals();
     saveRentals([...rentals, record]);
-    showToast(`✓ تم تأجير ${car.brand} ${car.model} للعميل ${clientName} — ${period}`);
+    showToast(`✓ تم تأجير ${car.brand} ${car.model} للعميل ${clientName} — ${qty} ${period}`);
   }
 
   function handleBuy(car: Car, clientName: string, clientPhone: string) {

@@ -86,6 +86,7 @@ export interface RentalRecord {
   clientName: string;
   clientPhone: string;
   period: "يوم" | "أسبوع" | "شهر";
+  quantity: number;
   totalPrice: number;
   date: string;
 }

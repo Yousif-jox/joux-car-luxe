@@ -24,6 +24,7 @@ function CarDetail() {
 
   const [cars, setCars]           = useState<Car[]>([]);
   const [period, setPeriod]       = useState<RentPeriod>("يوم");
+  const [quantity, setQuantity]   = useState<number>(1);
   const [clientName, setName]     = useState("");
   const [clientPhone, setPhone]   = useState("");
   const [toast, setToast]         = useState<string | null>(null);
@@ -46,9 +47,10 @@ function CarDetail() {
       showToast("⚠ من فضلك ادخل اسم العميل ورقم الهاتف");
       return;
     }
-    const price = period === "يوم" ? car.rental.pricePerDay
+    const unit = period === "يوم" ? car.rental.pricePerDay
       : period === "أسبوع" ? car.rental.pricePerWeek
       : car.rental.pricePerMonth;
+    const qty = Math.max(1, Math.floor(quantity) || 1);
 
     const updatedCars = cars.map(c => c.id === car.id ? { ...c, status: "مؤجر" as CarStatus } : c);
     setCars(updatedCars);
@@ -61,12 +63,13 @@ function CarDetail() {
       clientName: clientName.trim(),
       clientPhone: clientPhone.trim(),
       period,
-      totalPrice: price,
+      quantity: qty,
+      totalPrice: unit * qty,
       date: new Date().toLocaleDateString("ar-EG"),
     };
     saveRentals([...loadRentals(), record]);
     setName(""); setPhone(""); setShowRent(false);
-    showToast(`✓ تم تأجير السيارة للعميل ${clientName.trim()}`);
+    showToast(`✓ تم تأجير السيارة للعميل ${clientName.trim()} — ${qty} ${period}`);
   }
 
   function handleBuy() {
@@ -113,11 +116,13 @@ function CarDetail() {
   const canRent = (car.listingType === "إيجار" || car.listingType === "بيع وإيجار") && !!car.rental && car.status === "متاح";
   const canBuy  = (car.listingType === "بيع"  || car.listingType === "بيع وإيجار");
 
-  const rentalPrice = car.rental
+  const unitRentPrice = car.rental
     ? period === "يوم" ? car.rental.pricePerDay
     : period === "أسبوع" ? car.rental.pricePerWeek
     : car.rental.pricePerMonth
     : 0;
+  const safeQty = Math.max(1, Math.floor(quantity) || 1);
+  const rentalPrice = unitRentPrice * safeQty;
 
   return (
     <div className="min-h-screen">
@@ -298,7 +303,7 @@ function CarDetail() {
 
                 {/* اختيار الفترة */}
                 <div>
-                  <label className="text-xs text-muted-foreground mb-2 block">فترة الإيجار</label>
+                  <label className="text-xs text-muted-foreground mb-2 block">نوع الفترة</label>
                   <div className="grid grid-cols-3 gap-2">
                     {(["يوم", "أسبوع", "شهر"] as RentPeriod[]).map(p => (
                       <button key={p} onClick={() => setPeriod(p)}
@@ -309,11 +314,30 @@ function CarDetail() {
                   </div>
                 </div>
 
+                {/* عدد الفترات - يحدده العميل */}
+                <div>
+                  <label className="text-xs text-muted-foreground mb-2 block">
+                    عدد {period === "يوم" ? "الأيام" : period === "أسبوع" ? "الأسابيع" : "الشهور"} (حددها بنفسك)
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <button type="button" onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                      className="w-12 h-12 rounded-xl border border-border hover:border-gold/50 text-xl font-bold">−</button>
+                    <input type="number" min={1} max={365} value={quantity}
+                      onChange={e => setQuantity(Number(e.target.value))}
+                      className="flex-1 text-center bg-input border border-border rounded-xl px-4 py-3 text-lg font-bold focus:border-gold outline-none transition" />
+                    <button type="button" onClick={() => setQuantity(q => q + 1)}
+                      className="w-12 h-12 rounded-xl border border-border hover:border-gold/50 text-xl font-bold">+</button>
+                  </div>
+                  <div className="text-[11px] text-muted-foreground mt-1.5">
+                    السعر لكل {period}: {formatEGP(unitRentPrice)}
+                  </div>
+                </div>
+
                 {/* السعر */}
                 <div className="rounded-xl border border-gold/30 bg-gold/5 p-4 text-center">
                   <div className="text-xs text-muted-foreground mb-1">الإجمالي</div>
                   <div className="text-2xl font-black text-gold">{formatEGP(rentalPrice)}</div>
-                  <div className="text-xs text-muted-foreground mt-1">لمدة {period}</div>
+                  <div className="text-xs text-muted-foreground mt-1">لمدة {safeQty} {period}</div>
                 </div>
 
                 {/* بيانات العميل */}
