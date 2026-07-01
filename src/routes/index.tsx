@@ -260,27 +260,30 @@ function CarModal({ car, onClose, onRent, onBuy, onEdit }: {
                   ))}
                 </div>
               </div>
-              <div>
-                <label className="text-xs text-muted-foreground mb-2 block">
-                  عدد {period === "يوم" ? "الأيام" : period === "أسبوع" ? "الأسابيع" : "الشهور"} (حددها بنفسك)
-                </label>
-                <div className="flex items-center gap-2">
-                  <button type="button" onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                    className="w-11 h-11 rounded-xl border border-border hover:border-gold/50 text-lg font-bold">−</button>
-                  <input type="number" min={1} max={365} value={quantity}
-                    onChange={e => setQuantity(Number(e.target.value))}
-                    className="flex-1 text-center bg-input border border-border rounded-xl px-4 py-2.5 text-lg font-bold focus:border-gold outline-none transition" />
-                  <button type="button" onClick={() => setQuantity(q => q + 1)}
-                    className="w-11 h-11 rounded-xl border border-border hover:border-gold/50 text-lg font-bold">+</button>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs text-muted-foreground mb-1.5 block">📅 من تاريخ</label>
+                  <input type="date" value={startDate} min={new Date().toISOString().slice(0, 10)}
+                    onChange={e => setStartDate(e.target.value)}
+                    className="w-full bg-input border border-border rounded-xl px-3 py-2.5 text-sm focus:border-gold outline-none transition" />
                 </div>
-                <div className="text-[11px] text-muted-foreground mt-1.5">
-                  السعر لكل {period}: {formatEGP(unitPrice)}
+                <div>
+                  <label className="text-xs text-muted-foreground mb-1.5 block">📅 إلى تاريخ</label>
+                  <input type="date" value={endDate} min={startDate || new Date().toISOString().slice(0, 10)}
+                    onChange={e => setEndDate(e.target.value)}
+                    className="w-full bg-input border border-border rounded-xl px-3 py-2.5 text-sm focus:border-gold outline-none transition" />
                 </div>
+              </div>
+              <div className="text-[11px] text-muted-foreground -mt-1">
+                السعر لكل {period}: {formatEGP(unitPrice)}
+                {daysBetween > 0 && <> — إجمالي المدة: {daysBetween} يوم ({safeQty} {period})</>}
               </div>
               <div className="rounded-xl border border-gold/30 bg-gold/5 p-4 text-center">
                 <div className="text-xs text-muted-foreground mb-1">إجمالي الإيجار</div>
                 <div className="text-2xl font-black text-gold">{formatEGP(rentalPrice)}</div>
-                <div className="text-xs text-muted-foreground mt-1">لمدة {safeQty} {period}</div>
+                <div className="text-xs text-muted-foreground mt-1">
+                  {daysBetween > 0 ? `من ${startDate} إلى ${endDate}` : `لمدة ${safeQty} ${period}`}
+                </div>
               </div>
               <div className="space-y-3">
                 <div>
