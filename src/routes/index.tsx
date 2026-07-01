@@ -41,7 +41,8 @@ function CarModal({ car, onClose, onRent, onBuy, onEdit }: {
 
   const [tab, setTab]           = useState<"details" | "buy" | "rent">("details");
   const [period, setPeriod]     = useState<RentPeriod>("يوم");
-  const [quantity, setQuantity] = useState<number>(1);
+  const [startDate, setStartDate] = useState<string>(() => new Date().toISOString().slice(0, 10));
+  const [endDate, setEndDate]     = useState<string>("");
   const [clientName, setName]   = useState("");
   const [clientPhone, setPhone] = useState("");
 
@@ -56,14 +57,26 @@ function CarModal({ car, onClose, onRent, onBuy, onEdit }: {
     : period === "أسبوع" ? car.rental.pricePerWeek
     : car.rental.pricePerMonth
     : 0;
-  const safeQty = Math.max(1, Math.floor(quantity) || 1);
+
+  // احسب عدد الوحدات من التاريخين
+  const daysBetween = (() => {
+    if (!startDate || !endDate) return 0;
+    const s = new Date(startDate).getTime();
+    const e = new Date(endDate).getTime();
+    if (isNaN(s) || isNaN(e) || e < s) return 0;
+    return Math.floor((e - s) / (1000 * 60 * 60 * 24)) + 1; // inclusive
+  })();
+  const unitDivisor = period === "يوم" ? 1 : period === "أسبوع" ? 7 : 30;
+  const safeQty = Math.max(1, Math.ceil(daysBetween / unitDivisor) || 1);
   const rentalPrice = unitPrice * safeQty;
 
   const features = getCarFeatures(car);
 
   function submitRent() {
     if (!clientName.trim() || !clientPhone.trim()) { alert("من فضلك ادخل اسم العميل ورقم الهاتف"); return; }
-    onRent(car, period, safeQty, clientName.trim(), clientPhone.trim());
+    if (!startDate || !endDate) { alert("من فضلك حدد تاريخ بداية ونهاية الإيجار"); return; }
+    if (new Date(endDate) < new Date(startDate)) { alert("تاريخ النهاية يجب أن يكون بعد تاريخ البداية"); return; }
+    onRent(car, period, safeQty, clientName.trim(), clientPhone.trim(), startDate, endDate);
     onClose();
   }
   function submitBuy() {
