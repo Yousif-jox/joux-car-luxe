@@ -32,7 +32,7 @@ const BRAND_LOGOS = ["Toyota","Kia","Hyundai","BMW","Mercedes","Nissan","Audi","
 function CarModal({ car, onClose, onRent, onBuy, onEdit }: {
   car: Car;
   onClose: () => void;
-  onRent: (car: Car, period: RentPeriod, quantity: number, name: string, phone: string) => void;
+  onRent: (car: Car, period: RentPeriod, quantity: number, name: string, phone: string, startDate: string, endDate: string) => void;
   onBuy: (car: Car, name: string, phone: string) => void;
   onEdit?: (updated: Car) => void;
 }) {
