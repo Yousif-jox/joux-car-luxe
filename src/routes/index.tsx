@@ -369,10 +369,10 @@ function Showroom() {
       <div className="bg-[#1a1a1a] text-white text-xs">
         <div className="container mx-auto px-6 py-2 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <span>📞 16227</span>
+            <span>📞 01206178908</span>
             <span className="hidden sm:inline opacity-70">خدمة عملاء على مدار الساعة</span>
           </div>
-          <div className="opacity-70 hidden sm:block">القاهرة — مصر</div>
+          <div className="opacity-70 hidden sm:block">hghs;k]vdm — مصر</div>
         </div>
       </div>
 
@@ -423,8 +423,8 @@ function Showroom() {
             🎉 أقوى عروض التمويل في مصر
           </div>
           <div className="flex items-center justify-center gap-3 md:gap-6 mb-4 flex-wrap">
-            <span className="text-3xl md:text-5xl font-bold drop-shadow">فائدة</span>
-            <span className="text-7xl md:text-[10rem] font-black leading-none drop-shadow-lg" style={{textShadow:"0 6px 30px rgba(0,0,0,0.25)"}}>9.9<span className="text-4xl md:text-7xl align-top">%</span></span>
+            <span className="text-3xl md:text-5xl font-bold drop-shadow">{"\n"}</span>
+            <span className="text-7xl md:text-[10rem] font-black leading-none drop-shadow-lg" style={{textShadow:"0 6px 30px rgba(0,0,0,0.25)"}}>{"\n"}<span className="text-4xl md:text-7xl align-top"></span></span>
           </div>
           <p className="text-lg md:text-2xl font-semibold mb-2">على جميع السيارات الجديدة</p>
           <p className="text-sm md:text-base opacity-90 mb-8">مقدم يبدأ من 30% • أقساط حتى 60 شهر • موافقة فورية</p>
@@ -592,8 +592,8 @@ function Showroom() {
           <div>
             <h4 className="font-bold text-white mb-3">تواصل معنا</h4>
             <ul className="space-y-2 opacity-80">
-              <li>📞 16227</li>
-              <li>📍 القاهرة — مصر</li>
+              <li>📞 01206178908</li>
+              <li>📍 hghs;k]vdm — مصر</li>
               <li>🕐 خدمة 24/7</li>
             </ul>
           </div>
