@@ -24,6 +24,7 @@ function CarDetail() {
 
   const [cars, setCars]           = useState<Car[]>([]);
   const [period, setPeriod]       = useState<RentPeriod>("يوم");
+  const [quantity, setQuantity]   = useState<number>(1);
   const [clientName, setName]     = useState("");
   const [clientPhone, setPhone]   = useState("");
   const [toast, setToast]         = useState<string | null>(null);
