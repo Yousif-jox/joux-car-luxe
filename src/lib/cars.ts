@@ -89,6 +89,8 @@ export interface RentalRecord {
   quantity: number;
   totalPrice: number;
   date: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 const KEY = "jox_cars_v7";
