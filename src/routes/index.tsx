@@ -328,7 +328,7 @@ function Showroom() {
     setTimeout(() => setToast(null), 3500);
   }
 
-  function handleRent(car: Car, period: RentPeriod, quantity: number, clientName: string, clientPhone: string) {
+  function handleRent(car: Car, period: RentPeriod, quantity: number, clientName: string, clientPhone: string, startDate: string, endDate: string) {
     // تحديث حالة السيارة
     const updatedCars = cars.map(c => c.id === car.id ? { ...c, status: "مؤجر" as CarStatus } : c);
     setCars(updatedCars);
@@ -347,10 +347,12 @@ function Showroom() {
       quantity: qty,
       totalPrice: unit * qty,
       date: new Date().toLocaleDateString("ar-EG"),
+      startDate,
+      endDate,
     };
     const rentals = loadRentals();
     saveRentals([...rentals, record]);
-    showToast(`✓ تم تأجير ${car.brand} ${car.model} للعميل ${clientName} — ${qty} ${period}`);
+    showToast(`✓ تم تأجير ${car.brand} ${car.model} للعميل ${clientName} من ${startDate} إلى ${endDate}`);
   }
 
   function handleBuy(car: Car, clientName: string, clientPhone: string) {
