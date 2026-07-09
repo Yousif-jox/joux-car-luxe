@@ -281,16 +281,22 @@ function CarModal({ car, onClose, onRent, onBuy, onEdit }: {
                 <div>
                   <label className="text-xs text-muted-foreground mb-1.5 block">📅 من تاريخ</label>
                   <input type="date" value={startDate} min={new Date().toISOString().slice(0, 10)}
-                    onChange={e => setStartDate(e.target.value)}
+                    onChange={e => { setStartDate(e.target.value); setRentError(null); }}
                     className="w-full bg-input border border-border rounded-xl px-3 py-2.5 text-sm focus:border-gold outline-none transition" />
                 </div>
                 <div>
                   <label className="text-xs text-muted-foreground mb-1.5 block">📅 إلى تاريخ</label>
                   <input type="date" value={endDate} min={startDate || new Date().toISOString().slice(0, 10)}
-                    onChange={e => setEndDate(e.target.value)}
+                    onChange={e => { setEndDate(e.target.value); setRentError(null); }}
                     className="w-full bg-input border border-border rounded-xl px-3 py-2.5 text-sm focus:border-gold outline-none transition" />
                 </div>
               </div>
+              {rentError && (
+                <div className="text-xs text-rose-600 bg-rose-50 border border-rose-200 rounded-lg px-3 py-2 flex items-center gap-1.5">
+                  <span>⚠️</span>
+                  <span>{rentError}</span>
+                </div>
+              )}
               <div className="text-[11px] text-muted-foreground -mt-1">
                 السعر لكل {period}: {formatEGP(unitPrice)}
                 {daysBetween > 0 && <> — إجمالي المدة: {daysBetween} يوم ({safeQty} {period})</>}
