@@ -45,6 +45,7 @@ function CarModal({ car, onClose, onRent, onBuy, onEdit }: {
   const [endDate, setEndDate]     = useState<string>("");
   const [clientName, setName]   = useState("");
   const [clientPhone, setPhone] = useState("");
+  const [rentError, setRentError] = useState<string | null>(null);
 
   // quick-edit state
   const [editMode, setEditMode] = useState(false);
