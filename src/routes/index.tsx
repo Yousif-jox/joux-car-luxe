@@ -73,10 +73,26 @@ function CarModal({ car, onClose, onRent, onBuy, onEdit }: {
 
   const features = getCarFeatures(car);
 
+  function validateRentDates(): string | null {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const s = new Date(startDate);
+    s.setHours(0, 0, 0, 0);
+    const e = new Date(endDate);
+    e.setHours(0, 0, 0, 0);
+
+    if (!clientName.trim() || !clientPhone.trim()) return "من فضلك أدخل اسم العميل ورقم الهاتف";
+    if (!startDate || !endDate) return "من فضلك حدد تاريخ بداية ونهاية الإيجار";
+    if (isNaN(s.getTime()) || isNaN(e.getTime())) return "تاريخ غير صالح";
+    if (s < today) return "تاريخ البداية لا يمكن أن يكون في الماضي";
+    if (e <= s) return "تاريخ النهاية يجب أن يكون بعد تاريخ البداية على الأقل بيوم واحد";
+    return null;
+  }
+
   function submitRent() {
-    if (!clientName.trim() || !clientPhone.trim()) { alert("من فضلك ادخل اسم العميل ورقم الهاتف"); return; }
-    if (!startDate || !endDate) { alert("من فضلك حدد تاريخ بداية ونهاية الإيجار"); return; }
-    if (new Date(endDate) < new Date(startDate)) { alert("تاريخ النهاية يجب أن يكون بعد تاريخ البداية"); return; }
+    const err = validateRentDates();
+    if (err) { setRentError(err); return; }
+    setRentError(null);
     onRent(car, period, safeQty, clientName.trim(), clientPhone.trim(), startDate, endDate);
     onClose();
   }
