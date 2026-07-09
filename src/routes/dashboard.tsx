@@ -297,7 +297,7 @@ function Dashboard() {
                 <table className="w-full text-sm">
                   <thead className="bg-secondary/50 text-xs uppercase text-muted-foreground">
                     <tr>
-                      {["التاريخ", "السيارة", "العميل", "الهاتف", "الفترة", "الإجمالي"].map(h =>
+                      {["التاريخ", "السيارة", "العميل", "الهاتف", "من تاريخ", "إلى تاريخ", "الفترة", "الإجمالي"].map(h =>
                         <th key={h} className="px-4 py-3 text-right whitespace-nowrap">{h}</th>)}
                     </tr>
                   </thead>
@@ -308,6 +308,8 @@ function Dashboard() {
                         <td className="px-4 py-3 font-semibold">{r.carName}</td>
                         <td className="px-4 py-3">{r.clientName}</td>
                         <td className="px-4 py-3 dir-ltr text-left">{r.clientPhone}</td>
+                        <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">{r.startDate || "—"}</td>
+                        <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">{r.endDate || "—"}</td>
                         <td className="px-4 py-3">
                           <span className="px-2 py-0.5 rounded-full text-xs bg-blue-500/15 text-blue-300 border border-blue-500/30">{r.period}</span>
                         </td>
