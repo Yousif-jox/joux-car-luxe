@@ -27,6 +27,11 @@ function statusBadge(s: CarStatus) {
 }
 
 const BRAND_LOGOS = ["Toyota","Kia","Hyundai","BMW","Mercedes","Nissan","Audi","Porsche","Lexus","Ford","Chevrolet","Honda","Jeep","Volkswagen","Peugeot","Tesla"];
+const BRAND_EMOJI: Record<string, string> = {
+  Toyota: "🚗", Kia: "🚙", Hyundai: "🚘", BMW: "🅱️", Mercedes: "⭐", Nissan: "🏁",
+  Audi: "🔗", Porsche: "🏎️", Lexus: "💎", Ford: "🐎", Chevrolet: "✨", Honda: "🏍️",
+  Jeep: "🧭", Volkswagen: "🚐", Peugeot: "🦁", Tesla: "⚡",
+};
 
 // ─── Modal ───────────────────────────────────────────────────────────────────
 function CarModal({ car, onClose, onRent, onBuy, onEdit }: {
