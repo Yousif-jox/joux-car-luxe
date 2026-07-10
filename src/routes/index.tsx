@@ -27,6 +27,27 @@ function statusBadge(s: CarStatus) {
 }
 
 const BRAND_LOGOS = ["Toyota","Kia","Hyundai","BMW","Mercedes","Nissan","Audi","Porsche","Lexus","Ford","Chevrolet","Honda","Jeep","Volkswagen","Peugeot","Tesla"];
+// Real brand logos (car-logos-dataset via jsDelivr CDN)
+const LOGO_CDN = "https://cdn.jsdelivr.net/gh/filippofilip95/car-logos-dataset/logos/optimized";
+const BRAND_LOGO_URL: Record<string, string> = {
+  Toyota:     `${LOGO_CDN}/toyota.png`,
+  Kia:        `${LOGO_CDN}/kia.png`,
+  Hyundai:    `${LOGO_CDN}/hyundai.png`,
+  BMW:        `${LOGO_CDN}/bmw.png`,
+  Mercedes:   `${LOGO_CDN}/mercedes-benz.png`,
+  Nissan:     `${LOGO_CDN}/nissan.png`,
+  Audi:       `${LOGO_CDN}/audi.png`,
+  Porsche:    `${LOGO_CDN}/porsche.png`,
+  Lexus:      `${LOGO_CDN}/lexus.png`,
+  Ford:       `${LOGO_CDN}/ford.png`,
+  Chevrolet:  `${LOGO_CDN}/chevrolet.png`,
+  Honda:      `${LOGO_CDN}/honda.png`,
+  Jeep:       `${LOGO_CDN}/jeep.png`,
+  Volkswagen: `${LOGO_CDN}/volkswagen.png`,
+  Peugeot:    `${LOGO_CDN}/peugeot.png`,
+  Tesla:      `${LOGO_CDN}/tesla.png`,
+};
+// Fallback emoji if a logo fails to load
 const BRAND_EMOJI: Record<string, string> = {
   Toyota: "🚗", Kia: "🚙", Hyundai: "🚘", BMW: "🅱️", Mercedes: "⭐", Nissan: "🏁",
   Audi: "🔗", Porsche: "🏎️", Lexus: "💎", Ford: "🐎", Chevrolet: "✨", Honda: "🏍️",
@@ -537,8 +558,19 @@ function Showroom() {
               title={`عرض سيارات ${b}`}
               className="group inline-flex items-center gap-2 px-4 py-2 rounded-full border border-transparent hover:border-[#f4511e]/40 hover:bg-[#f4511e]/5 transition-all whitespace-nowrap"
             >
-              <span className="text-3xl transition-transform group-hover:scale-125 group-hover:-translate-y-0.5">
-                {BRAND_EMOJI[b] ?? "🚗"}
+              <span className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white border border-border shadow-sm overflow-hidden transition-transform group-hover:scale-125 group-hover:-translate-y-0.5">
+                <img
+                  src={BRAND_LOGO_URL[b]}
+                  alt={b}
+                  loading="lazy"
+                  className="w-9 h-9 object-contain"
+                  onError={(e) => {
+                    const t = e.currentTarget;
+                    t.style.display = "none";
+                    (t.nextElementSibling as HTMLElement | null)?.style.setProperty("display", "inline");
+                  }}
+                />
+                <span style={{ display: "none" }} className="text-2xl">{BRAND_EMOJI[b] ?? "🚗"}</span>
               </span>
               <span className="text-lg font-black text-muted-foreground/70 group-hover:text-[#f4511e] tracking-wider">
                 {b}
@@ -552,8 +584,18 @@ function Showroom() {
       {brandSplash && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-md animate-in fade-in duration-200">
           <div className="text-center">
-            <div className="text-[10rem] leading-none drop-shadow-[0_10px_40px_rgba(244,81,30,0.6)] animate-[brandPop_0.9s_cubic-bezier(.2,1.4,.4,1)_forwards]">
-              {BRAND_EMOJI[brandSplash] ?? "🚗"}
+            <div className="w-56 h-56 mx-auto rounded-3xl bg-white shadow-2xl flex items-center justify-center p-8 animate-[brandPop_0.9s_cubic-bezier(.2,1.4,.4,1)_forwards] drop-shadow-[0_10px_40px_rgba(244,81,30,0.6)]">
+              <img
+                src={BRAND_LOGO_URL[brandSplash]}
+                alt={brandSplash}
+                className="w-full h-full object-contain"
+                onError={(e) => {
+                  const t = e.currentTarget;
+                  t.style.display = "none";
+                  (t.nextElementSibling as HTMLElement | null)?.style.setProperty("display", "block");
+                }}
+              />
+              <span style={{ display: "none" }} className="text-[8rem] leading-none">{BRAND_EMOJI[brandSplash] ?? "🚗"}</span>
             </div>
             <div className="mt-4 text-4xl font-black text-white tracking-widest">{brandSplash}</div>
             <div className="mt-2 text-sm text-white/70">جاري تحميل سيارات {brandSplash}...</div>
