@@ -27,6 +27,27 @@ function statusBadge(s: CarStatus) {
 }
 
 const BRAND_LOGOS = ["Toyota","Kia","Hyundai","BMW","Mercedes","Nissan","Audi","Porsche","Lexus","Ford","Chevrolet","Honda","Jeep","Volkswagen","Peugeot","Tesla"];
+// Real brand logos (car-logos-dataset via jsDelivr CDN)
+const LOGO_CDN = "https://cdn.jsdelivr.net/gh/filippofilip95/car-logos-dataset/logos/optimized";
+const BRAND_LOGO_URL: Record<string, string> = {
+  Toyota:     `${LOGO_CDN}/toyota.png`,
+  Kia:        `${LOGO_CDN}/kia.png`,
+  Hyundai:    `${LOGO_CDN}/hyundai.png`,
+  BMW:        `${LOGO_CDN}/bmw.png`,
+  Mercedes:   `${LOGO_CDN}/mercedes-benz.png`,
+  Nissan:     `${LOGO_CDN}/nissan.png`,
+  Audi:       `${LOGO_CDN}/audi.png`,
+  Porsche:    `${LOGO_CDN}/porsche.png`,
+  Lexus:      `${LOGO_CDN}/lexus.png`,
+  Ford:       `${LOGO_CDN}/ford.png`,
+  Chevrolet:  `${LOGO_CDN}/chevrolet.png`,
+  Honda:      `${LOGO_CDN}/honda.png`,
+  Jeep:       `${LOGO_CDN}/jeep.png`,
+  Volkswagen: `${LOGO_CDN}/volkswagen.png`,
+  Peugeot:    `${LOGO_CDN}/peugeot.png`,
+  Tesla:      `${LOGO_CDN}/tesla.png`,
+};
+// Fallback emoji if a logo fails to load
 const BRAND_EMOJI: Record<string, string> = {
   Toyota: "🚗", Kia: "🚙", Hyundai: "🚘", BMW: "🅱️", Mercedes: "⭐", Nissan: "🏁",
   Audi: "🔗", Porsche: "🏎️", Lexus: "💎", Ford: "🐎", Chevrolet: "✨", Honda: "🏍️",
