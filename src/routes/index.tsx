@@ -584,8 +584,18 @@ function Showroom() {
       {brandSplash && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-md animate-in fade-in duration-200">
           <div className="text-center">
-            <div className="text-[10rem] leading-none drop-shadow-[0_10px_40px_rgba(244,81,30,0.6)] animate-[brandPop_0.9s_cubic-bezier(.2,1.4,.4,1)_forwards]">
-              {BRAND_EMOJI[brandSplash] ?? "🚗"}
+            <div className="w-56 h-56 mx-auto rounded-3xl bg-white shadow-2xl flex items-center justify-center p-8 animate-[brandPop_0.9s_cubic-bezier(.2,1.4,.4,1)_forwards] drop-shadow-[0_10px_40px_rgba(244,81,30,0.6)]">
+              <img
+                src={BRAND_LOGO_URL[brandSplash]}
+                alt={brandSplash}
+                className="w-full h-full object-contain"
+                onError={(e) => {
+                  const t = e.currentTarget;
+                  t.style.display = "none";
+                  (t.nextElementSibling as HTMLElement | null)?.style.setProperty("display", "block");
+                }}
+              />
+              <span style={{ display: "none" }} className="text-[8rem] leading-none">{BRAND_EMOJI[brandSplash] ?? "🚗"}</span>
             </div>
             <div className="mt-4 text-4xl font-black text-white tracking-widest">{brandSplash}</div>
             <div className="mt-2 text-sm text-white/70">جاري تحميل سيارات {brandSplash}...</div>
