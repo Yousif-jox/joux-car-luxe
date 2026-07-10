@@ -135,3 +135,11 @@
   display: flex; gap: 3rem; width: max-content;
   animation: marquee-rtl 30s linear infinite;
 }
+
+@media print {
+  body * { visibility: hidden !important; }
+  #rentals-section, #rentals-section * { visibility: visible !important; }
+  #rentals-section { position: absolute; inset: 0; width: 100%; box-shadow: none !important; border: none !important; background: #fff !important; color: #000 !important; }
+  #rentals-section table { color: #000 !important; }
+  .no-print { display: none !important; }
+}
