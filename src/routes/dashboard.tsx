@@ -288,8 +288,24 @@ function Dashboard() {
 
         {/* تاب عقود الإيجار */}
         {tab === "rentals" && (
-          <section className="card-luxury rounded-2xl overflow-hidden">
-            <h2 className="text-xl font-bold p-6 pb-4">عقود الإيجار ({rentals.length})</h2>
+          <section className="card-luxury rounded-2xl overflow-hidden" id="rentals-section">
+            <div className="p-6 pb-4 flex items-center justify-between gap-3 flex-wrap no-print">
+              <h2 className="text-xl font-bold">عقود الإيجار ({rentals.length})</h2>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => exportRentalsCSV(rentals)}
+                  disabled={rentals.length === 0}
+                  className="px-4 py-2 rounded-lg border border-gold/40 text-gold hover:bg-gold/10 transition text-sm disabled:opacity-40 disabled:cursor-not-allowed">
+                  ⬇︎ تصدير CSV
+                </button>
+                <button
+                  onClick={() => printRentals()}
+                  disabled={rentals.length === 0}
+                  className="px-4 py-2 rounded-lg gold-gradient text-background font-bold hover:opacity-90 transition text-sm disabled:opacity-40 disabled:cursor-not-allowed">
+                  🖨 طباعة
+                </button>
+              </div>
+            </div>
             {rentals.length === 0 ? (
               <div className="text-center py-16 text-muted-foreground">لا توجد عقود إيجار بعد</div>
             ) : (
