@@ -558,8 +558,19 @@ function Showroom() {
               title={`عرض سيارات ${b}`}
               className="group inline-flex items-center gap-2 px-4 py-2 rounded-full border border-transparent hover:border-[#f4511e]/40 hover:bg-[#f4511e]/5 transition-all whitespace-nowrap"
             >
-              <span className="text-3xl transition-transform group-hover:scale-125 group-hover:-translate-y-0.5">
-                {BRAND_EMOJI[b] ?? "🚗"}
+              <span className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white border border-border shadow-sm overflow-hidden transition-transform group-hover:scale-125 group-hover:-translate-y-0.5">
+                <img
+                  src={BRAND_LOGO_URL[b]}
+                  alt={b}
+                  loading="lazy"
+                  className="w-9 h-9 object-contain"
+                  onError={(e) => {
+                    const t = e.currentTarget;
+                    t.style.display = "none";
+                    (t.nextElementSibling as HTMLElement | null)?.style.setProperty("display", "inline");
+                  }}
+                />
+                <span style={{ display: "none" }} className="text-2xl">{BRAND_EMOJI[b] ?? "🚗"}</span>
               </span>
               <span className="text-lg font-black text-muted-foreground/70 group-hover:text-[#f4511e] tracking-wider">
                 {b}
