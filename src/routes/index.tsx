@@ -348,6 +348,16 @@ function Showroom() {
   const [query, setQuery]             = useState("");
   const [selectedCar, setSelectedCar] = useState<Car | null>(null);
   const [toast, setToast]             = useState<string | null>(null);
+  const [brandSplash, setBrandSplash] = useState<string | null>(null);
+
+  const pickBrand = (b: string) => {
+    setBrand(b);
+    setBrandSplash(b);
+    setTimeout(() => {
+      setBrandSplash(null);
+      document.getElementById("cars")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 900);
+  };
 
   useEffect(() => { setCars(loadCars()); }, []);
 
