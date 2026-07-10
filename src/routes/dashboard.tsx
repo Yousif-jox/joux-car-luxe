@@ -345,6 +345,27 @@ function Dashboard() {
 
 const inputCls = "w-full bg-input border border-border rounded-lg px-3 py-2.5 text-foreground focus:border-gold outline-none text-sm";
 
+function exportRentalsCSV(rentals: RentalRecord[]) {
+  const headers = ["التاريخ", "السيارة", "العميل", "الهاتف", "من تاريخ", "إلى تاريخ", "الفترة", "المدة", "الإجمالي (ج.م)"];
+  const esc = (v: string | number) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  const rows = [...rentals].reverse().map(r => [
+    r.date, r.carName, r.clientName, r.clientPhone,
+    r.startDate || "—", r.endDate || "—", r.period, r.quantity ?? "—", r.totalPrice,
+  ].map(esc).join(","));
+  const csv = "\uFEFF" + [headers.map(esc).join(","), ...rows].join("\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `rentals_${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function printRentals() {
+  window.print();
+}
+
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
