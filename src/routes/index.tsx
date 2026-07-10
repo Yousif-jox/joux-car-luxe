@@ -530,12 +530,37 @@ function Showroom() {
       <section id="brands" className="bg-white border-y border-border py-5 overflow-hidden">
         <div className="brand-marquee">
           {[...BRAND_LOGOS, ...BRAND_LOGOS].map((b, i) => (
-            <span key={i} className="text-2xl font-black text-muted-foreground/60 whitespace-nowrap tracking-wider">
-              {b}
-            </span>
+            <button
+              key={i}
+              type="button"
+              onClick={() => pickBrand(b)}
+              title={`عرض سيارات ${b}`}
+              className="group inline-flex items-center gap-2 px-4 py-2 rounded-full border border-transparent hover:border-[#f4511e]/40 hover:bg-[#f4511e]/5 transition-all whitespace-nowrap"
+            >
+              <span className="text-3xl transition-transform group-hover:scale-125 group-hover:-translate-y-0.5">
+                {BRAND_EMOJI[b] ?? "🚗"}
+              </span>
+              <span className="text-lg font-black text-muted-foreground/70 group-hover:text-[#f4511e] tracking-wider">
+                {b}
+              </span>
+            </button>
           ))}
         </div>
       </section>
+
+      {/* Brand splash overlay */}
+      {brandSplash && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="text-center">
+            <div className="text-[10rem] leading-none drop-shadow-[0_10px_40px_rgba(244,81,30,0.6)] animate-[brandPop_0.9s_cubic-bezier(.2,1.4,.4,1)_forwards]">
+              {BRAND_EMOJI[brandSplash] ?? "🚗"}
+            </div>
+            <div className="mt-4 text-4xl font-black text-white tracking-widest">{brandSplash}</div>
+            <div className="mt-2 text-sm text-white/70">جاري تحميل سيارات {brandSplash}...</div>
+          </div>
+        </div>
+      )}
+
 
 
       {/* Filters */}
