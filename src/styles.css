@@ -109,23 +109,59 @@
 
 @keyframes car-drive-rtl {
   0%   { transform: translateX(110vw); opacity: 0; }
-  10%  { opacity: 1; }
-  90%  { opacity: 1; }
-  100% { transform: translateX(-20vw); opacity: 0; }
+  8%   { opacity: 1; }
+  92%  { opacity: 1; }
+  100% { transform: translateX(-40vw); opacity: 0; }
 }
 @keyframes car-drive-ltr {
-  0%   { transform: translateX(-20vw) scaleX(-1); opacity: 0; }
-  10%  { opacity: 1; }
-  90%  { opacity: 1; }
+  0%   { transform: translateX(-40vw) scaleX(-1); opacity: 0; }
+  8%   { opacity: 1; }
+  92%  { opacity: 1; }
   100% { transform: translateX(110vw) scaleX(-1); opacity: 0; }
+}
+@keyframes headlight-flicker {
+  0%, 100% { opacity: 0.9; }
+  50%      { opacity: 1; }
 }
 .hero-cars {
   position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0;
 }
-.hero-cars span {
+.hero-cars .car-lane {
   position: absolute; display: block; will-change: transform;
-  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.25));
 }
+.hero-cars .car-img {
+  display: block; width: 100%; height: auto;
+  filter:
+    drop-shadow(0 20px 25px rgba(0,0,0,0.55))
+    drop-shadow(0 0 40px rgba(255,180,80,0.35));
+}
+.hero-cars .car-lane::before,
+.hero-cars .car-lane::after {
+  content: ""; position: absolute; pointer-events: none;
+  animation: headlight-flicker 1.6s ease-in-out infinite;
+}
+/* headlight cone — front (right side of unflipped image = right end) */
+.hero-cars .car-lane::before {
+  right: -55%; top: 55%;
+  width: 70%; height: 22%;
+  background: radial-gradient(ellipse at left center,
+    rgba(255,240,200,0.85) 0%,
+    rgba(255,200,120,0.35) 30%,
+    rgba(255,180,80,0) 70%);
+  transform: translateY(-50%);
+  filter: blur(6px);
+}
+/* taillight glow — back (left side of unflipped image) */
+.hero-cars .car-lane::after {
+  left: -8%; top: 45%;
+  width: 22%; height: 18%;
+  background: radial-gradient(circle,
+    rgba(255,60,30,0.75) 0%,
+    rgba(255,60,30,0.25) 40%,
+    rgba(255,60,30,0) 75%);
+  filter: blur(4px);
+}
+
 
 @keyframes marquee-rtl {
   0% { transform: translateX(0); }
