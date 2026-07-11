@@ -521,7 +521,18 @@ function Showroom() {
                 animation: `${c.dir === "rtl" ? "car-drive-rtl" : "car-drive-ltr"} ${c.duration} linear ${c.delay} infinite`,
               }}
             >
-              <img src={bmwHero} alt="" className="car-img" draggable={false} />
+              <img
+                src={bmwHero}
+                alt=""
+                className="car-img"
+                draggable={false}
+                loading="lazy"
+                decoding="async"
+                fetchPriority="low"
+                width={1536}
+                height={768}
+              />
+
             </span>
           ))}
         </div>
