@@ -370,14 +370,19 @@ function Showroom() {
   const [selectedCar, setSelectedCar] = useState<Car | null>(null);
   const [toast, setToast]             = useState<string | null>(null);
   const [brandSplash, setBrandSplash] = useState<string | null>(null);
+  const [splashPhase, setSplashPhase] = useState<"loading" | "done">("loading");
 
   const pickBrand = (b: string) => {
     setBrand(b);
+    setSplashPhase("loading");
     setBrandSplash(b);
+    // بعد لحظات قصيرة نظهر علامة الاكتمال ✓
+    setTimeout(() => setSplashPhase("done"), 650);
+    // ثم نخفي الشاشة بسلاسة وننتقل لقسم السيارات
     setTimeout(() => {
       setBrandSplash(null);
       document.getElementById("cars")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 900);
+    }, 1150);
   };
 
   useEffect(() => { setCars(loadCars()); }, []);
