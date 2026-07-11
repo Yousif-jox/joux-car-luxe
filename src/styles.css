@@ -107,60 +107,83 @@
   color: #fff;
 }
 
+/* GPU-only transforms — translate3d promotes each lane to its own compositor layer
+   so the main thread and paint pipeline stay idle during the animation. */
 @keyframes car-drive-rtl {
-  0%   { transform: translateX(110vw); opacity: 0; }
+  0%   { transform: translate3d(110vw, 0, 0); opacity: 0; }
   8%   { opacity: 1; }
   92%  { opacity: 1; }
-  100% { transform: translateX(-40vw); opacity: 0; }
+  100% { transform: translate3d(-40vw, 0, 0); opacity: 0; }
 }
 @keyframes car-drive-ltr {
-  0%   { transform: translateX(-40vw) scaleX(-1); opacity: 0; }
+  0%   { transform: translate3d(-40vw, 0, 0) scaleX(-1); opacity: 0; }
   8%   { opacity: 1; }
   92%  { opacity: 1; }
-  100% { transform: translateX(110vw) scaleX(-1); opacity: 0; }
+  100% { transform: translate3d(110vw, 0, 0) scaleX(-1); opacity: 0; }
 }
 @keyframes headlight-flicker {
-  0%, 100% { opacity: 0.9; }
+  0%, 100% { opacity: 0.85; }
   50%      { opacity: 1; }
 }
 .hero-cars {
   position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0;
+  /* Isolate paint & layout so animation never invalidates surrounding content */
+  contain: strict;
+  content-visibility: auto;
 }
 .hero-cars .car-lane {
-  position: absolute; display: block; will-change: transform;
+  position: absolute; display: block;
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 .hero-cars .car-img {
   display: block; width: 100%; height: auto;
-  filter:
-    drop-shadow(0 20px 25px rgba(0,0,0,0.55))
-    drop-shadow(0 0 40px rgba(255,180,80,0.35));
+  /* Single, cheaper drop-shadow (was 2 stacked filters — ~2× the paint cost). */
+  filter: drop-shadow(0 12px 18px rgba(0,0,0,0.5));
+  transform: translateZ(0);
 }
 .hero-cars .car-lane::before,
 .hero-cars .car-lane::after {
   content: ""; position: absolute; pointer-events: none;
-  animation: headlight-flicker 1.6s ease-in-out infinite;
+  will-change: opacity;
+  animation: headlight-flicker 2.4s ease-in-out infinite;
 }
-/* headlight cone — front (right side of unflipped image = right end) */
+/* headlight cone — pre-blurred via gradient falloff (no filter: blur, which repaints every frame). */
 .hero-cars .car-lane::before {
   right: -55%; top: 55%;
   width: 70%; height: 22%;
   background: radial-gradient(ellipse at left center,
     rgba(255,240,200,0.85) 0%,
-    rgba(255,200,120,0.35) 30%,
-    rgba(255,180,80,0) 70%);
-  transform: translateY(-50%);
-  filter: blur(6px);
+    rgba(255,200,120,0.30) 35%,
+    rgba(255,180,80,0) 75%);
+  transform: translate3d(0, -50%, 0);
 }
-/* taillight glow — back (left side of unflipped image) */
+/* taillight glow */
 .hero-cars .car-lane::after {
   left: -8%; top: 45%;
   width: 22%; height: 18%;
   background: radial-gradient(circle,
     rgba(255,60,30,0.75) 0%,
-    rgba(255,60,30,0.25) 40%,
-    rgba(255,60,30,0) 75%);
-  filter: blur(4px);
+    rgba(255,60,30,0.22) 45%,
+    rgba(255,60,30,0) 80%);
+  transform: translateZ(0);
 }
+
+/* Small screens: keep only one lane, drop the second-heaviest filter work */
+@media (max-width: 768px) {
+  .hero-cars .car-lane:nth-child(n+2) { display: none; }
+  .hero-cars .car-img { filter: drop-shadow(0 8px 12px rgba(0,0,0,0.45)); }
+}
+
+/* Respect user setting — freeze the animation entirely */
+@media (prefers-reduced-motion: reduce) {
+  .hero-cars .car-lane,
+  .hero-cars .car-lane::before,
+  .hero-cars .car-lane::after { animation: none !important; }
+  .hero-cars .car-lane { opacity: 0.35; transform: translate3d(30vw, 0, 0); }
+}
+
 
 
 @keyframes marquee-rtl {
