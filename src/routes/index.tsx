@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { loadCars, saveCars, loadRentals, saveRentals, loadSales, saveSales, getCarFeatures, formatEGP, type Car, type CarStatus, type ListingType, type RentalRecord, type SaleRecord } from "@/lib/cars";
+import bmwHero from "@/assets/bmw-m5-hero.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -506,22 +507,25 @@ function Showroom() {
       <section className="hero-banner relative overflow-hidden">
         <div className="hero-cars" aria-hidden="true">
           {[
-            { emoji: "🚗", top: "12%", size: "3.5rem", duration: "18s", delay: "0s",   dir: "rtl" },
-            { emoji: "🏎️", top: "32%", size: "3rem",   duration: "12s", delay: "3s",   dir: "rtl" },
-            { emoji: "🚙", top: "55%", size: "4rem",   duration: "22s", delay: "1.5s", dir: "ltr" },
-            { emoji: "🚘", top: "72%", size: "2.8rem", duration: "16s", delay: "6s",   dir: "rtl" },
-            { emoji: "🛻", top: "88%", size: "3.2rem", duration: "20s", delay: "4s",   dir: "ltr" },
+            { top: "18%", width: "28rem", duration: "16s", delay: "0s",   dir: "rtl", opacity: 0.55 },
+            { top: "48%", width: "36rem", duration: "22s", delay: "5s",   dir: "ltr", opacity: 0.7  },
+            { top: "74%", width: "22rem", duration: "13s", delay: "2.5s", dir: "rtl", opacity: 0.4  },
           ].map((c, i) => (
-            <span key={i}
+            <span
+              key={i}
+              className="car-lane"
               style={{
-                top: c.top, fontSize: c.size,
+                top: c.top,
+                width: c.width,
+                opacity: c.opacity,
                 animation: `${c.dir === "rtl" ? "car-drive-rtl" : "car-drive-ltr"} ${c.duration} linear ${c.delay} infinite`,
-                opacity: 0.22,
-              }}>
-              {c.emoji}
+              }}
+            >
+              <img src={bmwHero} alt="" className="car-img" draggable={false} />
             </span>
           ))}
         </div>
+
         <div className="container mx-auto px-6 py-20 md:py-28 relative z-10 text-center">
           <div className="inline-block bg-white/15 backdrop-blur px-4 py-1.5 rounded-full text-xs font-semibold mb-6 border border-white/30">
             🎉 أقوى عروض التمويل في مصر
