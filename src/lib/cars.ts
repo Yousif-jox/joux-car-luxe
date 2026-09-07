@@ -23,15 +23,6 @@ export interface Car {
   features?: string[];
 }
 
-  features?: string[];
-  listingType?: "بيع" | "إيجار" | "بيع وإيجار";
-  rental?: {
-    pricePerDay?: number;
-    pricePerWeek?: number;
-    pricePerMonth?: number;
-  };
-}
-
 export interface SaleRecord {
   id: string;
   carId: string;
@@ -41,10 +32,6 @@ export interface SaleRecord {
   price: number;
   date: string;
 }
-
-const KEY = "jox_cars_v4";
-
-const SALES_KEY = "jox_sales_v1";
 
 const SALES_KEY = "jox_sales_v1";
 
@@ -112,7 +99,6 @@ const RENTALS_KEY = "jox_rentals_v1";
 // صور من Unsplash - مضمونة التحميل
 const seed: Car[] = [
   // ===== Toyota =====
-const seed: Car[] = [
   { id: "1", brand: "Toyota", model: "Corolla", year: 2025, price: 1450000, color: "أبيض", fuel: "بنزين", status: "متاح", listingType: "بيع وإيجار",
     image: "https://images.unsplash.com/photo-1623869675781-80aa31012a5a?w=800&auto=format&fit=crop",
     rental: { pricePerDay: 1800, pricePerWeek: 10000, pricePerMonth: 32000 } },
@@ -275,9 +261,6 @@ const seed: Car[] = [
   { id: "46", brand: "Mitsubishi", model: "Outlander", year: 2025, price: 1900000, color: "أبيض", fuel: "هجين", status: "متاح", listingType: "بيع وإيجار",
     image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&auto=format&fit=crop",
     rental: { pricePerDay: 2500, pricePerWeek: 14000, pricePerMonth: 45000 } }
-];
-
-export function loadCars(): Car[] {
 ];
 
 export function loadCars(): Car[] {
